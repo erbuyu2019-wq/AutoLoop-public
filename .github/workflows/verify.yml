@@ -21,4 +21,16 @@ jobs:
 
       - name: Run AutoLoop verification
         shell: powershell
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-autoloop.ps1
+        run: |
+          $pester = Get-Module -ListAvailable Pester | Where-Object { $_.Version -eq [version]"3.4.0" } | Select-Object -First 1
+          if (-not $pester) {
+            throw "Pester 3.4.0 is required by the current test suite."
+          }
+
+          $moduleRoot = Join-Path $PWD ".ci\modules"
+          $pesterTarget = Join-Path $moduleRoot "Pester"
+          New-Item -ItemType Directory -Force -Path $pesterTarget | Out-Null
+          Copy-Item -Path (Join-Path $pester.ModuleBase "*") -Destination $pesterTarget -Recurse -Force
+          $env:PSModulePath = "$moduleRoot;$env:PSModulePath"
+
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-autoloop.ps1
