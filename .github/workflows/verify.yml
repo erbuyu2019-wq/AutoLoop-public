@@ -16,7 +16,8 @@ jobs:
         shell: powershell
         run: |
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-          Install-Module Pester -Force -Scope CurrentUser -SkipPublisherCheck
+          Install-Module Pester -RequiredVersion 3.4.0 -Force -Scope CurrentUser -SkipPublisherCheck
+          Import-Module Pester -RequiredVersion 3.4.0 -Force
 
       - name: Run AutoLoop verification
         shell: powershell
