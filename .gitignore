@@ -1,0 +1,25 @@
+﻿# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Local AutoLoop runtime and worktree state
+.autoloop/
+.worktrees/
+
+# Logs, temporary files, and local backups
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# PowerShell / Pester local outputs
+TestResults/
+test-results/
+coverage/
+*.TestResults.xml
+coverage.xml
