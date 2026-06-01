@@ -12,4 +12,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-autoloop.ps1
 
 ## License
 
-No license file is included yet. Select and add a license before creating a public repository.
+MIT.
