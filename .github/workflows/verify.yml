@@ -27,7 +27,7 @@ jobs:
             throw "Pester 3.4.0 is required by the current test suite."
           }
 
-          $moduleRoot = Join-Path $PWD ".ci\modules"
+          $moduleRoot = Join-Path $env:RUNNER_TEMP "autoloop-powershell-modules"
           $pesterTarget = Join-Path $moduleRoot "Pester"
           New-Item -ItemType Directory -Force -Path $pesterTarget | Out-Null
           Copy-Item -Path (Join-Path $pester.ModuleBase "*") -Destination $pesterTarget -Recurse -Force
