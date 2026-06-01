@@ -1,4 +1,4 @@
-# Coordinator Startup Checklist
+﻿# Coordinator Startup Checklist
 
 Use this checklist at the start of a coordinator session after reading the target project's `AGENTS.md` and coordination rules. It is a manual review aid only. It does not rank tasks, assign owners, update boards, dispatch workers, or execute code.
 
@@ -16,21 +16,21 @@ Use this checklist at the start of a coordinator session after reading the targe
 Run the read-only summary first:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File E:\ProductDevelop\AutoLoop\scripts\coordination\summarize-coordination-state.ps1 -ProjectRoots <target-project>
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\AutoLoop\scripts\coordination\summarize-coordination-state.ps1 -ProjectRoots <target-project>
 ```
 
 For multiple projects:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File E:\ProductDevelop\AutoLoop\scripts\coordination\summarize-coordination-state.ps1 -ProjectRoots <project-a>,<project-b>,<project-c>
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\AutoLoop\scripts\coordination\summarize-coordination-state.ps1 -ProjectRoots <project-a>,<project-b>,<project-c>
 ```
 
 Drill down only as needed:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File E:\ProductDevelop\AutoLoop\scripts\coordination\check-coordination-state.ps1 -ProjectRoot <target-project>
-powershell -NoProfile -ExecutionPolicy Bypass -File E:\ProductDevelop\AutoLoop\scripts\coordination\check-board.ps1 -BoardPath <target-project>\docs\coordination\board.md
-powershell -NoProfile -ExecutionPolicy Bypass -File E:\ProductDevelop\AutoLoop\scripts\coordination\check-report.ps1 -ReportPath <report.md> -Strict
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\AutoLoop\scripts\coordination\check-coordination-state.ps1 -ProjectRoot <target-project>
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\AutoLoop\scripts\coordination\check-board.ps1 -BoardPath <target-project>\docs\coordination\board.md
+powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\AutoLoop\scripts\coordination\check-report.ps1 -ReportPath <report.md> -Strict
 ```
 
 ## Result Handling

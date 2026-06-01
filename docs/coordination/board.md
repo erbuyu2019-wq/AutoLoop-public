@@ -8,7 +8,7 @@ Last Updated: `2026-06-01`
 
 | Owner | Scope | Workspace / Thread | Notes |
 | --- | --- | --- | --- |
-| coordinator | example planning and review | `<repo>` | keeps AutoLoop lightweight and manual |
+| coordinator | example planning and review | `repo-root` | keeps AutoLoop lightweight and manual |
 | docs | example coordination documents | `docs/coordination/` | maintains public examples |
 
 ## Tasks

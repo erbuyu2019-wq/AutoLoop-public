@@ -5,7 +5,7 @@
 - Work order ID: `T-PUB-002`
 - Owner: `tools`
 - Result: `done`
-- Branch / workspace: `main` / `<repo>`
+- Branch / workspace: `main` / `repo-root`
 - Report date: `2026-06-01`
 - Evidence level: `local-readiness`
 

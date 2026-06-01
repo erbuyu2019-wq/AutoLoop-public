@@ -1,13 +1,13 @@
-# Dispatch Instruction
+﻿# Dispatch Instruction
 
 Use this block when a coordinator has prepared or recommended a work order and needs the user to copy a clear handoff into the target worker thread. This is a manual handoff only; it does not rank tasks, assign owners automatically, lock worktrees, control Codex Desktop threads, or update `thread-registry.md`.
 
-Coordinator output invariant: whenever a coordinator creates or recommends a work order, its final response must include either a complete `派发指令` block or a short `No dispatch` reason explaining why no worker should be started. A `Dispatch note` inside a work order is only a planning hint; it is not a complete multi-thread handoff by itself.
+Coordinator output invariant: whenever a coordinator creates or recommends a work order, its final response must include either a complete `dispatch instruction` block or a short `No dispatch` reason explaining why no worker should be started. A `Dispatch note` inside a work order is only a planning hint; it is not a complete multi-thread handoff by itself.
 
 ## Template
 
 ```text
-派发指令
+dispatch instruction
 - 发给：[thread label / owner lane]
 - 工作区：[path]
 - 分支：[branch]
@@ -37,9 +37,9 @@ No dispatch: [reason no worker should be started now]
 ## Examples
 
 ```text
-派发指令
+dispatch instruction
 - 发给：AutoLoop / docs developer / manual-dispatch-instruction
-- 工作区：E:\ProductDevelop\AutoLoop
+- 工作区：C:\Projects\AutoLoop
 - 分支：master
 - 工单：docs/coordination/work-orders/T-XXX-manual-docs-change.md
 - 预期报告：docs/coordination/reports/T-XXX-worker-report.md
@@ -50,9 +50,9 @@ No dispatch: [reason no worker should be started now]
 ```
 
 ```text
-派发指令
+dispatch instruction
 - 发给：Project / coordinator reviewer / report-check
-- 工作区：E:\ProductDevelop\ExampleProject
+- 工作区：C:\Projects\ExampleProject
 - 分支：main
 - 工单：docs/coordination/work-orders/T-YYY-report-review.md
 - 预期报告：docs/coordination/reports/T-YYY-worker-report.md
