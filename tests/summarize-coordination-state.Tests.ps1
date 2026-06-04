@@ -48,9 +48,22 @@ $Rows
     return $Root
 }
 
+function Add-TestReport {
+    param(
+        [string]$Root,
+        [string]$Name,
+        [string]$Content
+    )
+
+    $reportPath = Join-Path (Join-Path $Root "docs\coordination\reports") $Name
+    Set-Content -LiteralPath $reportPath -Encoding UTF8 -Value $Content
+    return $reportPath
+}
+
 function Invoke-Summary {
     param(
         [string[]]$ProjectRoots,
+        [switch]$Brownfield,
         [switch]$Json
     )
 
@@ -62,6 +75,10 @@ function Invoke-Summary {
         $SummaryScript,
         "-ProjectRoots"
     ) + $ProjectRoots
+
+    if ($Brownfield) {
+        $arguments += "-Brownfield"
+    }
 
     if ($Json) {
         $arguments += "-Json"
@@ -151,6 +168,43 @@ Describe "summarize-coordination-state.ps1" {
             $result.ExitCode | Should Be 1
             $summary.result | Should Be "FAIL"
             $summary.summary.resultCounts.FAIL | Should Be 1
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It "passes Brownfield through to child coordination state checks" {
+        $root = New-AutoLoopTempDirectory
+        try {
+            New-TestCoordinationProject -Root $root -Rows "| T-001 | todo | tools | Implement slice | scripts | none | Dispatch worker |" | Out-Null
+            $reportContent = @'
+# Worker Report
+
+## Summary
+
+- Work order ID: `T-001`
+- Owner: `tools`
+- Result: `done`
+'@
+            Add-TestReport -Root $root -Name "T-001-worker-report.md" -Content $reportContent | Out-Null
+
+            $strictResult = Invoke-Summary -ProjectRoots @($root) -Json
+            $strictSummary = $strictResult.Output | ConvertFrom-Json
+            $brownfieldResult = Invoke-Summary -ProjectRoots @($root) -Brownfield -Json
+            $brownfieldSummary = $brownfieldResult.Output | ConvertFrom-Json
+
+            $strictResult.ExitCode | Should Be 1
+            $strictSummary.result | Should Be "FAIL"
+            $strictSummary.reportValidationMode | Should Be "strict"
+            $brownfieldResult.ExitCode | Should Be 0
+            $brownfieldSummary.result | Should Be "WARN"
+            $brownfieldSummary.reportValidationMode | Should Be "brownfield"
+            $brownfieldSummary.projects[0].result | Should Be "WARN"
+            $brownfieldSummary.projects[0].findingCounts.WARN | Should Be 2
+            $brownfieldSummary.projects[0].findingCounts.FAIL | Should Be 0
+            $brownfieldSummary.summary.resultCounts.WARN | Should Be 1
+            $brownfieldSummary.summary.findingCounts.WARN | Should Be 2
+            $brownfieldSummary.summary.findingCounts.FAIL | Should Be 0
         } finally {
             Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         }

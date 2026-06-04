@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added explicit brownfield pass-through support to the coordination-state summary wrapper.
+- Added a controlled `integration-bringup` work-order template for manual deploy/start/trigger/observe/classify loops with evidence gates and stop rules.
+
 ## v0.1.0 - 2026-06-01
 
 Initial public source release.

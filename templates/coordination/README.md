@@ -7,6 +7,7 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 - `board.md`: current-stage task board.
 - `decision-log.md`: durable decisions that affect goals, interfaces, security, deployment, runtime behavior, or data shape.
 - `work-order.md`: short task template for a long-lived owner thread or short-lived subagent.
+- `integration-bringup-work-order.md`: controlled work-order template for manual integration bring-up loops that need explicit topology, evidence gates, and stop rules.
 - `dispatch-instruction.md`: copyable manual handoff block for sending a work order to a worker thread.
 - `worker-report.md`: required return report after work is attempted.
 - `stage-closeout.md`: stage compression record for completed, deferred, blocked, and gated work.
@@ -21,6 +22,7 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 - Put trial notes or stage reviews in `docs/trials/`.
 - Copy `thread-registry.md` to `docs/coordination/thread-registry.md` only when a project needs manual active-thread context. Single-thread projects can omit it.
 - Use `dispatch-instruction.md` as a manual copy/paste aid after preparing a work order; do not treat it as an automated dispatch record.
+- Use `integration-bringup-work-order.md` only when a standard work order would over-split an approved deploy/start/trigger/observe/classify loop. It is still a manual work order and does not authorize automatic dispatch, automatic execution, hardware access, credential use, deployment, rollback, or target-project writes by itself.
 - `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `派发指令` block or a short `No dispatch` reason.
 
 ## Loop
@@ -32,6 +34,12 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 5. The coordinator reviews verification evidence, contract impact, not-verified items, and risks.
 6. The coordinator updates `board.md`; only gate-triggering items interrupt the user.
 7. The coordinator writes `stage-closeout.md` when a stage needs compression before the next stage.
+
+## Work-Order Modes
+
+- `standard`: one bounded task with a narrow owner and allowed scope.
+- `report-only`: evidence refresh, audit, closeout, or readiness review with no product/runtime edits.
+- `integration-bringup`: manual integration loop that records objective reclassification, runtime topology, evidence gates, stop rules, and separate command/runtime/data/user-visible/gap evidence.
 
 ## Boundaries
 

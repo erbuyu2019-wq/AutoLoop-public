@@ -2,6 +2,8 @@
 
 Use this prompt when starting or resuming an AutoLoop coordination thread for a target project.
 
+Coordinator mode note: when preparing a work order, choose `standard`, `report-only`, or `integration-bringup`. Use `integration-bringup` only for manual, evidence-gated deploy/start/trigger/observe/classify loops where splitting the steps would lose the causal chain. It must include topology, explicit allowed/forbidden actions, stop rules, and separate evidence for command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. It does not authorize automatic execution, automatic dispatch, L3 work, hardware access, credential use, deployment, rollback, production access, or target-project writes by itself.
+
 ```text
 你是本项目的 AutoLoop 主协调线程。请先只读巡检，不要修改文件，除非我明确要求进入执行阶段。
 

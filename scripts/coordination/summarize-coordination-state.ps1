@@ -1,5 +1,6 @@
 param(
     [string[]]$ProjectRoots = @((Get-Location).Path),
+    [switch]$Brownfield,
     [switch]$Json,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$AdditionalProjectRoots = @()
@@ -136,10 +137,26 @@ function Resolve-ProjectRoots {
 function Invoke-CoordinationStateCheck {
     param(
         [string]$CheckScript,
-        [string]$ProjectRoot
+        [string]$ProjectRoot,
+        [switch]$Brownfield
     )
 
-    $output = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $CheckScript -ProjectRoot $ProjectRoot -Json 2>&1)
+    $arguments = @(
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        $CheckScript,
+        "-ProjectRoot",
+        $ProjectRoot,
+        "-Json"
+    )
+
+    if ($Brownfield) {
+        $arguments += "-Brownfield"
+    }
+
+    $output = @(& powershell @arguments 2>&1)
     $exitCode = $LASTEXITCODE
     $rawOutput = $output -join "`n"
 
@@ -210,10 +227,14 @@ function Invoke-CoordinationStateCheck {
 $scriptRoot = Get-ScriptRoot
 $checkScript = Join-Path $scriptRoot "check-coordination-state.ps1"
 $requestedRoots = Resolve-ProjectRoots -Roots (@($ProjectRoots) + @($AdditionalProjectRoots))
+$reportValidationMode = "strict"
+if ($Brownfield) {
+    $reportValidationMode = "brownfield"
+}
 
 $projects = New-Object System.Collections.Generic.List[object]
 foreach ($projectRoot in $requestedRoots) {
-    $projects.Add((Invoke-CoordinationStateCheck -CheckScript $checkScript -ProjectRoot $projectRoot)) | Out-Null
+    $projects.Add((Invoke-CoordinationStateCheck -CheckScript $checkScript -ProjectRoot $projectRoot -Brownfield:$Brownfield)) | Out-Null
 }
 
 $aggregateResult = Get-ResultSeverity -Results @($projects | ForEach-Object { $_.result })
@@ -246,6 +267,7 @@ if ($Json) {
         schemaVersion = "1.0"
         generatedAt = ([DateTime]::UtcNow.ToString("o"))
         result = $aggregateResult
+        reportValidationMode = $reportValidationMode
         projects = @($projects.ToArray())
         summary = $summary
     } | ConvertTo-Json -Depth 8
@@ -260,6 +282,7 @@ if ($Json) {
 Write-Output "AutoLoop coordination state summary"
 Write-Output ("Generated: {0}" -f ([DateTime]::UtcNow.ToString("o")))
 Write-Output "Result: $aggregateResult"
+Write-Output "Report validation mode: $reportValidationMode"
 Write-Output ("Projects: {0}" -f $projects.Count)
 
 foreach ($project in $projects) {

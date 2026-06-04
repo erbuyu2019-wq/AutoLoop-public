@@ -35,6 +35,18 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 6. The coordinator updates `board.md`; only gate-triggering items interrupt the user.
 7. The coordinator writes `stage-closeout.md` when a stage needs compression before the next stage.
 
+## Work-Order Modes
+
+Use the smallest mode that fits the current coordination problem:
+
+- `standard`: one bounded implementation, documentation, review, or report task with a narrow allowed scope.
+- `report-only`: evidence refresh, investigation summary, readiness audit, or closeout where product/runtime files must not change.
+- `integration-bringup`: a manual, evidence-gated handoff for approved integration bring-up loops where deploy/start/trigger/observe/classify steps need to stay together to avoid losing the causal chain.
+
+Choose `integration-bringup` only after confirming that over-splitting would hide the integration seam. The work order must record objective reclassification, runtime topology, allowed actions, forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. This mode remains L0-L2 coordination by default: it does not select tasks, dispatch threads, run commands automatically, grant L3 execution, operate hardware, use credentials, deploy, roll back, or write target projects without explicit user approval in the work order.
+
+Start from `templates/coordination/integration-bringup-work-order.md` when using this mode.
+
 ## Coordinator Startup Runbook
 
 Use the summary wrapper at the start of a coordinator session when one person needs a compact, read-only view across one or more local projects. It is an orientation aid only; it does not choose tasks, update boards, assign owners, dispatch workers, or execute L3 work.
@@ -54,6 +66,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coor
 ```
 
 Use `-Json` only when another read-only review tool needs the aggregate fields. Consumers must check `schemaVersion` before relying on field names.
+
+For mature brownfield projects with historical worker-report shape debt, add explicit `-Brownfield` to the summary command. This keeps old strict report-shape debt visible as warnings while preserving focused `check-report.ps1 -Strict` for active or new reports.
 
 Use `templates/coordination/coordinator-startup-checklist.md` when a session needs a repeatable manual record of summary result, drill-down commands, gates, and the next coordinator action.
 

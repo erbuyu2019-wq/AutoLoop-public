@@ -29,7 +29,7 @@ Typical setup:
 - Keep one work order per current coordination need, and require one worker report per expected owner.
 - Use `check-integration-review.ps1` before closing multi-owner work.
 - Keep no-device readiness, local readiness, and live end-to-end proof separate.
-- Use explicit `-Brownfield` on aggregate `check-coordination-state.ps1` or `doctor.ps1` when historical worker reports predate the latest strict report shape. This keeps the historical debt visible as warnings; new or active reports still need focused `check-report.ps1 -Strict` before acceptance.
+- Use explicit `-Brownfield` on aggregate `check-coordination-state.ps1`, `summarize-coordination-state.ps1`, or `doctor.ps1` when historical worker reports predate the latest strict report shape. This keeps the historical debt visible as warnings; new or active reports still need focused `check-report.ps1 -Strict` before acceptance.
 
 This mode is useful when AutoLoop acts as a shadow governance layer over an existing project.
 
@@ -40,3 +40,17 @@ This mode is useful when AutoLoop acts as a shadow governance layer over an exis
 - Keep L0-L2 as the default capability boundary.
 - Do not operate real credentials, hardware, production systems, deployment, merge, release, or rollback without explicit user approval.
 - Treat lint output as protocol evidence only. It does not prove technical correctness.
+
+## Optional Integration Bring-up Mode
+
+Use `integration-bringup` only when an active integration issue needs deploy/start/trigger/observe/classify steps to stay in one evidence chain. It is most useful for brownfield or multi-owner projects where repeated tiny work orders would lose the runtime topology, but it can be used in greenfield projects after the user approves the exact live or staging actions.
+
+This mode is a work-order shape, not a new automation level. It must keep:
+
+- one owner lane accountable for the bring-up loop;
+- explicit allowed and forbidden actions;
+- topology and evidence gates before more retries;
+- stop rules after repeated failures or a new blocker class;
+- separate evidence for command accepted, runtime state, data flow, user-visible outcome, and remaining gaps.
+
+Do not use this mode to bypass user gates for credentials, hardware, deployment, rollback, production access, target-project writes, or L3 execution.

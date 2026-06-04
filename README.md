@@ -13,9 +13,12 @@ AutoLoop focuses on:
 - status and coordination-state checks;
 - board, work-order, report, and integration-review protocol lint;
 - evidence-level clarity;
+- controlled integration bring-up work-order templates;
 - manual dispatch and user-gated coordination.
 
 AutoLoop does not provide a daemon, GUI, automatic Codex Desktop thread control, automatic merge/release/rollback, automatic live smoke, or default autonomous code execution.
+
+Use `templates/coordination/integration-bringup-work-order.md` only when a standard work order would over-split an approved deploy/start/trigger/observe/classify loop. It is a manual, evidence-gated work-order shape; it does not authorize automatic execution, live smoke, hardware access, credentials, deployment, rollback, or target-project writes by itself.
 
 ## Verify
 
