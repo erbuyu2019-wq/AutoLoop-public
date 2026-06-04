@@ -35,6 +35,14 @@
 - Contract handling: `<no contract change | pre-report contract impact | follow linked contract>`
 - Secret / private data handling: `<redaction rule or none>`
 
+## Work-Order Size Guidance
+
+- A work order should be small enough for one owner, one worktree, and one reviewable evidence bundle.
+- Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together.
+- Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
+- Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
+- Keep this as coordinator guidance only; do not add checker rules that try to infer correct work-order size.
+
 ## Acceptance Commands
 
 Run the cheapest decisive checks that fit the task.

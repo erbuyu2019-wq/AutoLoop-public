@@ -1,7 +1,9 @@
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $CheckReportScript = Join-Path $RepoRoot "scripts\coordination\check-report.ps1"
+$ChecksLibrary = Join-Path $RepoRoot "scripts\lib\AutoLoop.Checks.ps1"
 $DogfoodReport = Join-Path $RepoRoot "docs\coordination\reports\phase6-dogfood-worker-report.md"
 $ReportTemplate = Join-Path $RepoRoot "templates\coordination\worker-report.md"
+. $ChecksLibrary
 
 function New-AutoLoopTempDirectory {
     $path = Join-Path ([System.IO.Path]::GetTempPath()) ("autoloop-test-" + [guid]::NewGuid().ToString("N"))
@@ -37,6 +39,12 @@ function Invoke-CheckReport {
 }
 
 Describe "check-report.ps1" {
+    It "pins the shared strict worker-report values" {
+        @(Get-AutoLoopWorkerReportResults) | Should Be @("done", "partial", "blocked", "rejected")
+        @(Get-AutoLoopWorkerReportEvidenceLevels) | Should Be @("local-readiness", "hardware-deferred", "live-smoke-required", "live-smoke-complete", "not applicable")
+        @(Get-AutoLoopWorkerReportNextSteps) | Should Be @("continue", "review", "needs coordinator decision", "needs user decision", "blocked")
+    }
+
     It "passes a complete report" {
         $result = Invoke-CheckReport -ReportPath $DogfoodReport
         $result.ExitCode | Should Be 0
@@ -328,6 +336,63 @@ Describe "check-report.ps1" {
 | Command | Result | Evidence |
 | --- | --- | --- |
 | `test` | failed | failed output |
+
+## Contract Impact
+
+- Public behavior changed: no
+- API / data model changed: no
+- Security / secret handling changed: no
+- Deployment / runtime behavior changed: no
+- Details: none
+
+## Not Verified
+
+- none
+
+## Risks
+
+- none
+
+## Next Suggested Step
+
+- `continue`
+- Reason: continue.
+'@
+            $result = Invoke-CheckReport -ReportPath $report -Strict
+            $result.ExitCode | Should Not Be 0
+            $result.Output | Should Match "done report has failed or not-run verification"
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It "fails strict checks when done has failed verification and the command contains a pipeline" {
+        $root = New-AutoLoopTempDirectory
+        try {
+            $report = Join-Path $root "failed-done-pipeline.md"
+            Set-Content -LiteralPath $report -Encoding UTF8 -Value @'
+# Worker Report
+
+## Summary
+
+- Work order ID: `T-001`
+- Owner: `app`
+- Result: `done`
+- Branch / workspace: `feature` / `path`
+- Report date: `2026-05-11`
+- Evidence level: `local-readiness`
+
+## Changed Scope
+
+| File / Area | Change | Reason |
+| --- | --- | --- |
+| `src/app/file.py` | changed | test |
+
+## Verification
+
+| Command | Result | Evidence |
+| --- | --- | --- |
+| `Get-ChildItem | Select-Object -First 1` | failed | failed output |
 
 ## Contract Impact
 

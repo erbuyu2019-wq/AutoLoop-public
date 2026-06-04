@@ -6,6 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 . (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Markdown.ps1")
+. (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Checks.ps1")
 
 $requiredSections = @(
     "Changed Scope",
@@ -100,9 +101,9 @@ function Get-VerificationResults {
             continue
         }
 
-        $columns = @($trimmed.Trim("|").Split("|") | ForEach-Object { $_.Trim().Trim([char]96) })
-        if ($columns.Count -ge 2 -and $columns[1].Length -gt 0) {
-            $results.Add($columns[1].ToLowerInvariant())
+        $columns = @(Get-AutoLoopMarkdownTableTrailingCells -Line $trimmed -CellCount 2)
+        if ($columns.Count -ge 2 -and $columns[0].Length -gt 0) {
+            $results.Add($columns[0].ToLowerInvariant())
         }
     }
 
@@ -113,9 +114,9 @@ function Get-StrictIssues {
     param([string[]]$Lines)
 
     $issues = New-Object System.Collections.Generic.List[string]
-    $allowedResults = @("done", "partial", "blocked", "rejected")
-    $allowedNextSteps = @("continue", "review", "needs coordinator decision", "needs user decision", "blocked")
-    $allowedEvidenceLevels = @("local-readiness", "hardware-deferred", "live-smoke-required", "live-smoke-complete", "not applicable")
+    $allowedResults = @(Get-AutoLoopWorkerReportResults)
+    $allowedNextSteps = @(Get-AutoLoopWorkerReportNextSteps)
+    $allowedEvidenceLevels = @(Get-AutoLoopWorkerReportEvidenceLevels)
 
     $summaryLines = Get-SectionLines -Lines $Lines -SectionName "Summary"
     if ($null -eq $summaryLines) {

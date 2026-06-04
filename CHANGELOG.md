@@ -4,8 +4,23 @@
 
 ### Added
 
+## v0.1.1 - 2026-06-05
+
+### Added
+
+- Added shared checker value helpers for board statuses and worker-report strict values.
+- Added right-sized work-order guidance to help coordinators avoid over-fragmenting tightly coupled feedback loops.
+- Added parser boundary coverage for Markdown sections and verification tables.
 - Added explicit brownfield pass-through support to the coordination-state summary wrapper.
 - Added a controlled `integration-bringup` work-order template for manual deploy/start/trigger/observe/classify loops with evidence gates and stop rules.
+
+### Fixed
+
+- Hardened strict worker-report verification parsing when command cells contain pipeline characters.
+
+### Boundary
+
+- No daemon, GUI, automatic dispatch, autonomous execution, package publishing, deployment, merge, rollback, credential handling, hardware handling, or production behavior.
 
 ## v0.1.0 - 2026-06-01
 

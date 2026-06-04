@@ -11,6 +11,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 . (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Markdown.ps1")
+. (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Checks.ps1")
 
 function Resolve-ExistingFile {
     param(
@@ -157,8 +158,8 @@ $issues = New-Object System.Collections.Generic.List[object]
 $expectedOwnerList = @(Get-NormalizedList -Values $ExpectedOwners)
 $seenOwners = @{}
 $reportSummaries = New-Object System.Collections.Generic.List[object]
-$allowedResults = @("done", "partial", "blocked", "rejected")
-$allowedNextSteps = @("continue", "review", "needs coordinator decision", "needs user decision", "blocked")
+$allowedResults = @(Get-AutoLoopWorkerReportResults)
+$allowedNextSteps = @(Get-AutoLoopWorkerReportNextSteps)
 
 $workOrderLines = @(Get-Content -Encoding UTF8 -LiteralPath $resolvedWorkOrderPath)
 $workOrderSummary = Get-SectionLines -Lines $workOrderLines -SectionName "Summary"

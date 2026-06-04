@@ -5,8 +5,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 . (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Markdown.ps1")
+. (Join-Path (Split-Path -Parent $PSScriptRoot) "lib\AutoLoop.Checks.ps1")
 
-$allowedStatuses = @("todo", "doing", "blocked", "review", "done")
+$allowedStatuses = @(Get-AutoLoopBoardStatuses)
 
 function Resolve-BoardPath {
     param([string]$Path)

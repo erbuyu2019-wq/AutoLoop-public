@@ -479,6 +479,67 @@ Run checks.
         }
     }
 
+    It "matches strict worker report failure for failed verification rows with pipeline commands" {
+        $root = New-AutoLoopTempDirectory
+        try {
+            New-TestCoordinationProject -Root $root -Rows "| T-001 | todo | tools | Implement slice | scripts | none | Dispatch worker |" | Out-Null
+            $reportContent = @'
+# Worker Report
+
+## Summary
+
+- Work order ID: `T-001`
+- Owner: `tools`
+- Result: `done`
+- Branch / workspace: `feature` / `path`
+- Report date: `2026-05-25`
+- Evidence level: `local-readiness`
+
+## Changed Scope
+
+| File / Area | Change | Reason |
+| --- | --- | --- |
+| `scripts/tool.ps1` | changed | test |
+
+## Verification
+
+| Command | Result | Evidence |
+| --- | --- | --- |
+| `Get-ChildItem | Select-Object -First 1` | failed | failed output |
+
+## Contract Impact
+
+- Public behavior changed: no
+- API / data model changed: no
+- Security / secret handling changed: no
+- Deployment / runtime behavior changed: no
+- Details: none
+
+## Not Verified
+
+- none
+
+## Risks
+
+- none
+
+## Next Suggested Step
+
+- `continue`
+- Reason: continue.
+'@
+            Add-TestReport -Root $root -Name "T-001-worker-report.md" -Content $reportContent | Out-Null
+
+            $result = Invoke-CheckCoordinationState -ProjectRoot $root
+
+            $result.ExitCode | Should Not Be 0
+            $result.Output | Should Match "Result: FAIL"
+            $result.Output | Should Match "\[FAIL\] Worker report checks failed: T-001-worker-report.md"
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It "matches work-order failure for empty acceptance commands" {
         $root = New-AutoLoopTempDirectory
         try {

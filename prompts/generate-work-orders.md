@@ -3,26 +3,32 @@
 Use this prompt when the coordinator needs to turn board items into short work orders for long-lived threads or temporary subagents.
 
 ```text
-请基于当前 `docs/coordination/board.md`、`decision-log.md`、`gates.md` 和 git/worktree 状态，生成下一批可执行工单。
+Generate the next batch of executable work orders based on the current `docs/coordination/board.md`, `decision-log.md`, `gates.md`, and git/worktree state.
 
-要求：
+Requirements:
 
-1. 只为状态为 `todo`、`blocked` 已解除、或 `review` 后需要返工的任务生成工单。
-2. 每张工单都必须使用 `docs/coordination/work-order.md` 的字段。
-3. 每张工单必须明确：
+1. Generate work orders only for tasks with status `todo`, tasks whose `blocked` state has been cleared, or tasks that need rework after `review`.
+2. Every work order must use the fields from `docs/coordination/work-order.md`.
+3. Every work order must make these items explicit:
    - owner
-   - 目标
-   - 允许修改范围
-   - 禁止触碰范围
-   - 是否允许契约变化
-   - 验收命令
-   - 停止并回报的条件
-4. 工单应短而具体，不要输出长篇设计说明。
-5. 如果任务触发 `gates.md`，不要生成执行工单，改为生成“需要用户确认”的决策摘要。
+   - goal
+   - allowed change scope
+   - forbidden scope
+   - whether contract changes are allowed
+   - acceptance commands
+   - stop-and-report conditions
+4. Keep each work order short and specific. Do not output long design notes.
+5. If a task triggers `gates.md`, do not generate an execution work order. Generate a user-decision summary instead.
+6. Right-size each work order:
+   - It should be small enough for one owner, one worktree, and one reviewable evidence bundle.
+   - Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together.
+   - Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
+   - Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
+   - Treat this as coordinator guidance only; do not invent checker rules that infer correct work-order size.
 
-输出格式：
+Output format:
 
-## 工单 <T-XXX>
+## Work Order <T-XXX>
 
 - Owner:
 - Goal:
@@ -33,13 +39,14 @@ Use this prompt when the coordinator needs to turn board items into short work o
 - Stop and Report If:
 - Return Report:
 
-## 需要用户确认
+## Needs User Confirmation
 
 - `<none or gate summary>`
 
-约束：
+Constraints:
 
-- 不要扩大 board 中的任务范围。
-- 不要把一个跨 owner 的大任务塞进单张工单；拆成按 owner 可交付的小工单。
-- 对 subagent 工单，优先选择短期探索、review、测试补齐或窄范围修复。
+- Do not expand task scope beyond the board.
+- Do not pack one large cross-owner task into a single work order. Split it into owner-scoped deliverables.
+- Do not over-fragment a single-owner feedback loop when the evidence only makes sense after the loop completes.
+- For subagent work orders, prefer short exploration, review, test coverage, or narrow fixes.
 ```

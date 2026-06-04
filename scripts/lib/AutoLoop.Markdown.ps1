@@ -185,3 +185,43 @@ function Get-AutoLoopMarkdownTableFirstCell {
     $commandCellEnd = $pipeIndexes[$pipeIndexes.Count - 2]
     return $content.Substring(0, $commandCellEnd).Trim().Trim([char]96).Replace("\|", "|")
 }
+
+function Get-AutoLoopMarkdownTableTrailingCells {
+    param(
+        [string]$Line,
+        [int]$CellCount
+    )
+
+    if ($CellCount -lt 1) {
+        return @()
+    }
+
+    $content = $Line.Trim()
+    if ($content.StartsWith("|")) {
+        $content = $content.Substring(1)
+    }
+
+    if ($content.EndsWith("|")) {
+        $content = $content.Substring(0, $content.Length - 1)
+    }
+
+    $pipeIndexes = @(Get-AutoLoopUnescapedPipeIndexes -Value $content)
+    if ($pipeIndexes.Count -lt $CellCount) {
+        return $null
+    }
+
+    $cells = New-Object System.Collections.Generic.List[string]
+    $firstTrailingPipeIndex = $pipeIndexes.Count - $CellCount
+    for ($i = 0; $i -lt $CellCount; $i++) {
+        $startIndex = $pipeIndexes[$firstTrailingPipeIndex + $i] + 1
+        if ($i -eq ($CellCount - 1)) {
+            $endIndex = $content.Length
+        } else {
+            $endIndex = $pipeIndexes[$firstTrailingPipeIndex + $i + 1]
+        }
+
+        $cells.Add($content.Substring($startIndex, $endIndex - $startIndex).Trim().Trim([char]96).Replace("\|", "|")) | Out-Null
+    }
+
+    return $cells.ToArray()
+}

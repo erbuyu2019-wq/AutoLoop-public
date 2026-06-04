@@ -1,8 +1,10 @@
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $CheckBoardScript = Join-Path $RepoRoot "scripts\coordination\check-board.ps1"
+$ChecksLibrary = Join-Path $RepoRoot "scripts\lib\AutoLoop.Checks.ps1"
 $DogfoodBoard = Join-Path $RepoRoot "docs\coordination\board.md"
 $BoardTemplate = Join-Path $RepoRoot "templates\coordination\board.md"
 $MultiOwnerExampleBoard = Join-Path $RepoRoot "docs\examples\multi-owner-smoke\board.md"
+. $ChecksLibrary
 
 function New-AutoLoopTempDirectory {
     $path = Join-Path ([System.IO.Path]::GetTempPath()) ("autoloop-test-" + [guid]::NewGuid().ToString("N"))
@@ -57,6 +59,10 @@ function Invoke-CheckBoard {
 }
 
 Describe "check-board.ps1" {
+    It "pins the shared board status values" {
+        @(Get-AutoLoopBoardStatuses) | Should Be @("todo", "doing", "blocked", "review", "done")
+    }
+
     It "passes the dogfood board" {
         $result = Invoke-CheckBoard -BoardPath $DogfoodBoard
         $result.ExitCode | Should Be 0

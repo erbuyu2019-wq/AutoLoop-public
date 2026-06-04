@@ -18,6 +18,11 @@ Task:
 - Use the fields from `docs/coordination/work-order.md`.
 - Choose the work-order mode explicitly: `standard`, `report-only`, or `integration-bringup`.
 - Keep scope narrow and owner-specific.
+- Right-size the work order: it should be small enough for one owner, one worktree, and one reviewable evidence bundle.
+- Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together.
+- Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
+- Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
+- Keep work-order size guidance as coordinator judgment only; do not add or imply checker rules that infer correct size.
 - Include allowed scope, forbidden scope, stop conditions, acceptance commands, dispatch note, and required return report.
 - Use `standard` for one bounded implementation, documentation, review, or report task.
 - Use `report-only` for evidence refreshes, readiness audits, investigations, and closeouts that must not edit product/runtime files.

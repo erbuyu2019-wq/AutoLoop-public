@@ -1,5 +1,7 @@
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $CheckIntegrationScript = Join-Path $RepoRoot "scripts\coordination\check-integration-review.ps1"
+$ChecksLibrary = Join-Path $RepoRoot "scripts\lib\AutoLoop.Checks.ps1"
+. $ChecksLibrary
 
 function New-AutoLoopTempDirectory {
     $path = Join-Path ([System.IO.Path]::GetTempPath()) ("autoloop-test-" + [guid]::NewGuid().ToString("N"))
@@ -147,6 +149,11 @@ function Invoke-CheckIntegration {
 }
 
 Describe "check-integration-review.ps1" {
+    It "uses the shared worker-report result and next-step values" {
+        @(Get-AutoLoopWorkerReportResults) | Should Be @("done", "partial", "blocked", "rejected")
+        @(Get-AutoLoopWorkerReportNextSteps) | Should Be @("continue", "review", "needs coordinator decision", "needs user decision", "blocked")
+    }
+
     It "accepts complete owner reports with no gates" {
         $root = New-AutoLoopTempDirectory
         try {
@@ -204,6 +211,21 @@ Describe "check-integration-review.ps1" {
             $result.ExitCode | Should Not Be 0
             $result.Output | Should Match "Result: NEEDS USER APPROVAL"
             $result.Output | Should Match "Contract impact requires user approval: device"
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It "blocks when a report has an invalid next suggested step" {
+        $root = New-AutoLoopTempDirectory
+        try {
+            $workOrder = New-TestWorkOrder -Root $root
+            $appReport = New-TestReport -Root $root -Owner "app" -NextStep "ship it"
+
+            $result = Invoke-CheckIntegration -WorkOrderPath $workOrder -ReportPaths @($appReport) -ExpectedOwners @("app")
+            $result.ExitCode | Should Not Be 0
+            $result.Output | Should Match "Result: BLOCKED"
+            $result.Output | Should Match "Invalid next suggested step for owner app"
         } finally {
             Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         }
