@@ -74,6 +74,107 @@ function Add-TestWorkOrder {
     return $workOrderPath
 }
 
+function New-TestWorkerReportContent {
+    param(
+        [string]$Result = "done",
+        [string]$EvidenceLevel = "local-readiness",
+        [string]$NextStep = "review",
+        [string]$VerificationResult = "passed",
+        [string[]]$OmitSections = @(),
+        [string[]]$PlaceholderSections = @()
+    )
+
+    $omitSectionLookup = @{}
+    foreach ($sectionName in @($OmitSections)) {
+        if ($sectionName) {
+            $omitSectionLookup[$sectionName] = $true
+        }
+    }
+
+    $placeholderSectionLookup = @{}
+    foreach ($sectionName in @($PlaceholderSections)) {
+        if ($sectionName) {
+            $placeholderSectionLookup[$sectionName] = $true
+        }
+    }
+
+    $parts = New-Object System.Collections.Generic.List[string]
+    $parts.Add(@"
+# Worker Report
+
+## Summary
+
+- Work order ID: T-001
+- Owner: tools
+- Result: $Result
+- Branch / workspace: feature / path
+- Report date: 2026-05-25
+- Evidence level: $EvidenceLevel
+"@.Trim()) | Out-Null
+
+    $sectionBodies = [ordered]@{
+        "Changed Scope" = @"
+| File / Area | Change | Reason |
+| --- | --- | --- |
+| scripts/tool.ps1 | changed | test |
+"@.Trim()
+        "Verification" = @"
+| Command | Result | Evidence |
+| --- | --- | --- |
+| test | $VerificationResult | evidence |
+"@.Trim()
+        "Contract Impact" = @"
+- Public behavior changed: no
+- API / data model changed: no
+- Security / secret handling changed: no
+- Deployment / runtime behavior changed: no
+- Details: none
+"@.Trim()
+        "Not Verified" = @"
+- none
+"@.Trim()
+        "Risks" = @"
+- none
+"@.Trim()
+    }
+
+    $placeholderBodies = [ordered]@{
+        "Changed Scope" = @"
+| File / Area | Change | Reason |
+| --- | --- | --- |
+"@.Trim()
+        "Verification" = @"
+| Command | Result | Evidence |
+| --- | --- | --- |
+"@.Trim()
+        "Contract Impact" = "- <impact>"
+        "Not Verified" = "- <not verified>"
+        "Risks" = "- <risk>"
+    }
+
+    foreach ($sectionName in $sectionBodies.Keys) {
+        if ($omitSectionLookup[$sectionName]) {
+            continue
+        }
+
+        $body = $sectionBodies[$sectionName]
+        if ($placeholderSectionLookup[$sectionName]) {
+            $body = $placeholderBodies[$sectionName]
+        }
+
+        $parts.Add(("## {0}`r`n`r`n{1}" -f $sectionName, $body).Trim()) | Out-Null
+    }
+
+    $parts.Add(@"
+## Next Suggested Step
+
+- $NextStep
+- Reason: test.
+"@.Trim()) | Out-Null
+
+    return (($parts.ToArray() -join "`r`n`r`n") + "`r`n")
+}
+
 function Invoke-CheckReport {
     param(
         [string]$ReportPath,
@@ -537,6 +638,61 @@ Run checks.
             $result.Output | Should Match "\[FAIL\] Worker report checks failed: T-001-worker-report.md"
         } finally {
             Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It "matches strict worker report failure shapes across direct and aggregate checks" {
+        $cases = @(
+            [pscustomobject]@{
+                Name = "invalid-result"
+                Content = New-TestWorkerReportContent -Result "success"
+                DirectPattern = "Invalid result value"
+            },
+            [pscustomobject]@{
+                Name = "invalid-evidence-level"
+                Content = New-TestWorkerReportContent -EvidenceLevel "unverified"
+                DirectPattern = "Invalid evidence level value"
+            },
+            [pscustomobject]@{
+                Name = "invalid-next-step"
+                Content = New-TestWorkerReportContent -NextStep "ship"
+                DirectPattern = "Invalid next suggested step"
+            },
+            [pscustomobject]@{
+                Name = "missing-required-section"
+                Content = New-TestWorkerReportContent -OmitSections @("Contract Impact")
+                DirectPattern = "Missing sections:"
+            },
+            [pscustomobject]@{
+                Name = "placeholder-only-section"
+                Content = New-TestWorkerReportContent -PlaceholderSections @("Changed Scope")
+                DirectPattern = "Empty or placeholder-only sections:"
+            },
+            [pscustomobject]@{
+                Name = "done-not-run-verification"
+                Content = New-TestWorkerReportContent -VerificationResult "not run" -NextStep "continue"
+                DirectPattern = "done report has failed or not-run verification"
+            }
+        )
+
+        foreach ($case in $cases) {
+            $root = New-AutoLoopTempDirectory
+            try {
+                New-TestCoordinationProject -Root $root -Rows "| T-001 | todo | tools | Implement slice | scripts | none | Dispatch worker |" | Out-Null
+                $reportName = "T-001-$($case.Name)-worker-report.md"
+                $reportPath = Add-TestReport -Root $root -Name $reportName -Content $case.Content
+
+                $strictResult = Invoke-CheckReport -ReportPath $reportPath -Strict
+                $stateResult = Invoke-CheckCoordinationState -ProjectRoot $root
+
+                $strictResult.ExitCode | Should Not Be 0
+                $strictResult.Output | Should Match $case.DirectPattern
+                $stateResult.ExitCode | Should Not Be 0
+                $stateResult.Output | Should Match "Result: FAIL"
+                $stateResult.Output | Should Match "\[FAIL\] Worker report checks failed: $reportName"
+            } finally {
+                Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+            }
         }
     }
 

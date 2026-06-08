@@ -1,4 +1,4 @@
-﻿# AutoLoop Coordination Templates
+# AutoLoop Coordination Templates
 
 These templates onboard a target project into the lightweight AutoLoop coordination protocol. The coordinator uses them to maintain a short board, create work orders, review worker reports, and decide when user approval is required.
 
@@ -22,7 +22,7 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 - Put trial notes or stage reviews in `docs/trials/`.
 - Copy `templates/coordination/thread-registry.md` to `docs/coordination/thread-registry.md` only when a project needs manual active-thread context. Single-thread projects can omit it.
 - Use `templates/coordination/dispatch-instruction.md` as a manual copy/paste aid after preparing a work order; do not treat it as an automated dispatch record.
-- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `dispatch instruction` block or a short `No dispatch` reason.
+- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `派发指令` block or a short `No dispatch` reason.
 - A work order's `Required Return Report` should name the exact strict report headings and checked summary values. New or active worker reports should pass `check-report.ps1 -Strict` before coordinator acceptance.
 
 ## Loop
@@ -51,23 +51,27 @@ Start from `templates/coordination/integration-bringup-work-order.md` when using
 
 Use the summary wrapper at the start of a coordinator session when one person needs a compact, read-only view across one or more local projects. It is an orientation aid only; it does not choose tasks, update boards, assign owners, dispatch workers, or execute L3 work.
 
+Set `$AutoLoopRoot` once per coordinator session to the AutoLoop checkout root. Do not infer it from the current directory, because the coordinator may run these commands from a target project directory.
+
 Run one project:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coordination\summarize-coordination-state.ps1 `
+$AutoLoopRoot = "<path-to-autoloop-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AutoLoopRoot "scripts\coordination\summarize-coordination-state.ps1") `
   -ProjectRoots <target-project>
 ```
 
 Run multiple projects:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coordination\summarize-coordination-state.ps1 `
+$AutoLoopRoot = "<path-to-autoloop-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AutoLoopRoot "scripts\coordination\summarize-coordination-state.ps1") `
   -ProjectRoots <project-a>,<project-b>,<project-c>
 ```
 
-Use `-Json` only when another read-only review tool needs the aggregate fields. Consumers must check `schemaVersion` before relying on field names.
-
 For mature brownfield projects with historical worker-report shape debt, add explicit `-Brownfield` to the summary command. This keeps old strict report-shape debt visible as warnings while preserving focused `check-report.ps1 -Strict` for active or new reports.
+
+Use `-Json` only when another read-only review tool needs the aggregate fields. Consumers must check `schemaVersion` before relying on field names.
 
 Use `templates/coordination/coordinator-startup-checklist.md` when a session needs a repeatable manual record of summary result, drill-down commands, gates, and the next coordinator action.
 
@@ -85,9 +89,10 @@ Interpret the aggregate result conservatively:
 Drill down with the narrowest read-only command that explains the result:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coordination\check-coordination-state.ps1 -ProjectRoot <target-project>
-powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coordination\check-board.ps1 -BoardPath <target-project>\docs\coordination\board.md
-powershell -NoProfile -ExecutionPolicy Bypass -File <autoloop-root>\scripts\coordination\check-report.ps1 -ReportPath <report.md> -Strict
+$AutoLoopRoot = "<path-to-autoloop-root>"
+powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AutoLoopRoot "scripts\coordination\check-coordination-state.ps1") -ProjectRoot <target-project>
+powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AutoLoopRoot "scripts\coordination\check-board.ps1") -BoardPath <target-project>\docs\coordination\board.md
+powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AutoLoopRoot "scripts\coordination\check-report.ps1") -ReportPath <report.md> -Strict
 ```
 
 Use `check-integration-review.ps1` when the question is cross-owner acceptance. A summary wrapper result is local-readiness evidence only; it is not live hardware proof, production proof, deployment proof, or permission to close a gate.

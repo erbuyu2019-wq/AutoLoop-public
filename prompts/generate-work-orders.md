@@ -25,6 +25,11 @@ Requirements:
    - Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
    - Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
    - Treat this as coordinator guidance only; do not invent checker rules that infer correct work-order size.
+7. Preserve bounded execution latitude:
+   - Keep allowed scope, forbidden scope, stop rules, credentials, hardware, production, deployment, rollback, destructive actions, and contract-impact boundaries strict.
+   - Do not default to one-shot or one-attempt limits for low-risk local docs, implementation, edit-test, or observe loops.
+   - Use explicit one-attempt limits only for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or an explicit user/work-order requirement.
+   - Prefer a bounded manual loop budget over micro-work-orders when an approved debugging or integration loop must keep edit/deploy/start/trigger/observe/classify steps together.
 
 Output format:
 
@@ -48,5 +53,6 @@ Constraints:
 - Do not expand task scope beyond the board.
 - Do not pack one large cross-owner task into a single work order. Split it into owner-scoped deliverables.
 - Do not over-fragment a single-owner feedback loop when the evidence only makes sense after the loop completes.
+- Do not use one-shot wording as a generic safety substitute; safety comes from exact boundaries, stop rules, and evidence gates.
 - For subagent work orders, prefer short exploration, review, test coverage, or narrow fixes.
 ```

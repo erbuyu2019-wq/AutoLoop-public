@@ -23,6 +23,11 @@ Task:
 - Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
 - Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
 - Keep work-order size guidance as coordinator judgment only; do not add or imply checker rules that infer correct size.
+- Keep hard boundaries strict: allowed files, forbidden systems, credentials, hardware, production, deployment, rollback, destructive actions, contract impacts, and stop rules are not flexible.
+- Inside approved low-risk local scope, allow reasonable edit-test iterations, harmless retries, and local test reruns needed to satisfy acceptance commands.
+- Do not default to one-shot or one-attempt wording for ordinary local implementation or docs work.
+- Use explicit one-attempt limits only for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or an explicit user/work-order requirement.
+- Prefer a bounded manual loop budget over micro-work-orders when an approved debugging or integration loop must keep edit/deploy/start/trigger/observe/classify steps together.
 - Include allowed scope, forbidden scope, stop conditions, acceptance commands, dispatch note, and required return report.
 - Use `standard` for one bounded implementation, documentation, review, or report task.
 - Use `report-only` for evidence refreshes, readiness audits, investigations, and closeouts that must not edit product/runtime files.

@@ -46,6 +46,7 @@ Use this template only when a standard work order would over-split a deploy/star
 ## Bring-up Loop
 
 Run only the approved loop below. Do not add retries or adjacent runtime actions without coordinator or user approval.
+If the work order allows repeated attempts, state the maximum time or attempt budget explicitly. A bounded budget is manual and evidence-gated; it does not authorize automatic retry loops, automatic execution, hardware access, credential use, deployment, rollback, production access, or target-project writes by itself.
 
 1. Deploy / prepare: `{exact command or manual action, or not applicable}`
 2. Start / activate: `{exact command or manual action, or not applicable}`

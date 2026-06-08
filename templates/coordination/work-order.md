@@ -41,6 +41,9 @@
 - Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together.
 - Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
 - Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
+- Keep boundaries strict: allowed files, forbidden systems, credentials, hardware, production, deployment, rollback, destructive actions, contract impacts, and stop rules are not flexible.
+- Inside approved low-risk local scope, allow reasonable edit-test iterations, harmless retries, and local test reruns needed to satisfy acceptance commands.
+- Do not default to one-shot or one-attempt wording for ordinary local implementation or docs work; reserve explicit one-attempt limits for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or an explicit user/work-order requirement.
 - Keep this as coordinator guidance only; do not add checker rules that try to infer correct work-order size.
 
 ## Acceptance Commands
