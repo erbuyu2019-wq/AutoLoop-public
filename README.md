@@ -4,6 +4,8 @@ AutoLoop is a lightweight coordination workflow for Codex App based development.
 
 AutoLoop is not a background daemon, GUI, project management database, autonomous coding robot, or replacement for a target project's own `AGENTS.md`, tests, OpenSpec, CI, release process, or human approval gates.
 
+For product positioning and loop taxonomy, see `docs/loop-engineering.md`.
+
 ## When To Use It
 
 Use AutoLoop when a local project needs:
@@ -69,13 +71,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\coordination\check-r
 1. Read `AGENTS.md`, `docs/coordination/README.md`, `board.md`, `decision-log.md`, and `gates.md`.
 2. Optionally run `summarize-coordination-state.ps1` across one or more target projects as a read-only startup digest.
 3. Run `status.ps1` or focused coordination checks against the target project that needs human review.
-4. Fill a short work order from `docs/coordination/work-order.md`.
+4. Make a `Granularity Gate` decision, then fill a short work order from `docs/coordination/work-order.md`.
 5. Give the work order to one owner thread or one short-lived subagent.
 6. Require the worker to return `worker-report.md` with the exact strict headings and checked summary values from the work order.
 7. Review verification evidence, scope, contract impact, and risk.
 8. Move the task to `done` only when the quality gates are satisfied.
 
-Use `templates/coordination/integration-bringup-work-order.md` only when a standard work order would over-split an integration loop. It is a manual, evidence-gated work-order mode for approved deploy/start/trigger/observe/classify loops; it does not authorize automatic execution, live smoke, hardware access, credentials, deployment, rollback, or target-project writes by itself.
+Default to one bounded bundle when the owner, workspace or worktree, objective, risk envelope, contract boundary, and evidence gate are the same. Split only when one report would blur responsibility or safety. Use `templates/coordination/integration-bringup-work-order.md` only when a standard work order would over-split an integration loop. It is a manual, evidence-gated work-order mode for approved deploy/start/trigger/observe/classify loops; it does not authorize automatic execution, live smoke, hardware access, credentials, deployment, rollback, or target-project writes by itself.
 
 For coordinator startup guidance, see the runbook in `docs/coordination/README.md` and the manual checklist template in `templates/coordination/coordinator-startup-checklist.md`.
 

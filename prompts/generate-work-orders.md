@@ -17,25 +17,46 @@ Requirements:
    - whether contract changes are allowed
    - acceptance commands
    - stop-and-report conditions
+   - any manual loop budget when a timebox or small fix-test cycle budget is useful
 4. Keep each work order short and specific. Do not output long design notes.
 5. If a task triggers `gates.md`, do not generate an execution work order. Generate a user-decision summary instead.
-6. Right-size each work order:
+6. Apply the Granularity Gate before drafting each work order:
+   - Decide `bounded bundle`, `split work orders`, `report-only`, `integration-bringup`, or `no dispatch`.
+   - Include a short reason for the decision.
+   - Use `no dispatch` when the safe next step is coordinator review, a user decision, or more evidence rather than worker execution.
+7. Apply Efficiency Guardrails before drafting:
+   - Fast Lane: if the task is one owner, one worktree, one objective, the same risk envelope, the same contract boundary, the same evidence gate, and no active board, gate, OpenSpec, or work-order rule requires a separate user decision, prefer one bounded bundle for implementation, local verification, and report.
+   - Evidence Value: classify the intended evidence as `direct product proof`, `runtime proof`, `integration proof`, `proxy evidence`, or `planning evidence`.
+   - Planning Depth: if recent work for the same objective has spent two or more consecutive tasks on planning or proxy evidence, prefer a bounded implementation/proof work order, a user-decision summary, or a clear `no dispatch` reason instead of another planning/proxy task.
+   - Keep this as coordinator judgment only; do not add checker rules or require exhaustive history counting.
+8. Right-size each work order:
    - It should be small enough for one owner, one worktree, and one reviewable evidence bundle.
-   - Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together.
-   - Split work orders when owners, worktrees, risk levels, contract boundaries, or acceptance gates differ.
-   - Combine steps when they share the same owner, workspace, objective, risk envelope, and evidence gate, especially for edit-test-observe or deploy-start-trigger-observe-classify loops.
+   - Default to one bounded bundle when the owner, workspace or worktree, objective, risk envelope, contract boundary, and evidence gate are the same.
+   - Do not split a tightly coupled feedback loop into separate micro-work-orders when the objective can only be proven by completing the loop together; the work order should close a useful feedback chain, not only one mechanical action.
+   - Useful feedback chains include `edit-test-observe`, `hypothesis-fix-verify`, `deploy-start-trigger-observe-classify`, and `evidence-refresh-review`.
+   - Split work orders only when owners, workspaces or worktrees, risk levels, contract boundaries, acceptance gates, user approval requirements, or evidence types differ enough that one report would blur responsibility or safety.
    - Treat this as coordinator guidance only; do not invent checker rules that infer correct work-order size.
-7. Preserve bounded execution latitude:
+8. Preserve bounded execution latitude:
    - Keep allowed scope, forbidden scope, stop rules, credentials, hardware, production, deployment, rollback, destructive actions, and contract-impact boundaries strict.
+   - Treat the issued work order as the loop contract for one bounded loop; existing fields define the goal/owner, boundary, approach, evidence, stop points, and return report.
    - Do not default to one-shot or one-attempt limits for low-risk local docs, implementation, edit-test, or observe loops.
    - Use explicit one-attempt limits only for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or an explicit user/work-order requirement.
-   - Prefer a bounded manual loop budget over micro-work-orders when an approved debugging or integration loop must keep edit/deploy/start/trigger/observe/classify steps together.
+   - Prefer a timebox or small fix-test cycle budget over micro-work-orders when an approved debugging or integration loop must keep edit/deploy/start/trigger/observe/classify steps together.
+   - Stop the loop when the manual budget is exceeded, a new blocker class appears, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
+9. For report-only work orders, evidence refreshes, or likely report-only corrections:
+   - Require worker reports to label git evidence as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
+   - Do not force the worker report to include its own future report-only commit; coordinator final acceptance git evidence is captured after the last commit, merge, push, or report-only boundary.
+   - Mention amend only as conditional: it is acceptable only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
 
 Output format:
 
 ## Work Order <T-XXX>
 
 - Owner:
+- Granularity decision:
+- Fast lane:
+- Evidence value:
+- Planning depth:
 - Goal:
 - Allowed Scope:
 - Forbidden Scope:
@@ -55,4 +76,5 @@ Constraints:
 - Do not over-fragment a single-owner feedback loop when the evidence only makes sense after the loop completes.
 - Do not use one-shot wording as a generic safety substitute; safety comes from exact boundaries, stop rules, and evidence gates.
 - For subagent work orders, prefer short exploration, review, test coverage, or narrow fixes.
+- Do not keep generating proxy-only or planning-only work when the remaining safe next step is implementation/proof, a user decision, or no dispatch.
 ```

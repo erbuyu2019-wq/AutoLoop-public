@@ -2,6 +2,8 @@
 
 These templates onboard a target project into the lightweight AutoLoop coordination protocol. The coordinator uses them to maintain a short board, create work orders, review worker reports, and decide when user approval is required.
 
+For the product-level loop-engineering vocabulary that these templates support, see `../loop-engineering.md`.
+
 ## Files
 
 - `board.md`: current-stage task board.
@@ -43,6 +45,12 @@ Use the smallest mode that fits the current coordination problem:
 - `report-only`: evidence refresh, investigation summary, readiness audit, or closeout where product/runtime files must not change.
 - `integration-bringup`: a manual, evidence-gated handoff for approved integration bring-up loops where deploy/start/trigger/observe/classify steps need to stay together to avoid losing the causal chain.
 
+Before drafting or dispatching a work order, record a `Granularity Gate` decision: `bounded bundle`, `split work orders`, `report-only`, `integration-bringup`, or `no dispatch`, with a short reason. Default to one bounded bundle when the owner, workspace or worktree, objective, risk envelope, contract boundary, and evidence gate are the same. Split only when owner, workspace or worktree, risk level, contract boundary, acceptance gate, user approval requirement, or evidence type differs enough that one report would blur responsibility or safety.
+
+A work order should close a useful feedback chain, not only one mechanical action. Useful chains include `edit-test-observe`, `hypothesis-fix-verify`, `deploy-start-trigger-observe-classify`, and `evidence-refresh-review`. For low-risk local work, allow reasonable edit-test iterations, harmless retries, and local reruns inside the work order. Reserve explicit one-attempt limits for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or explicit user or work-order requirements.
+
+Treat each issued work order as the loop contract for one bounded AutoLoop loop. Existing fields define the contract: goal and owner, allowed and forbidden scope, required approach, acceptance commands, stop-and-report conditions, and required return report. Use manual loop budgets such as a short timebox or a small fix-test cycle budget when they help keep a same-boundary feedback loop together. The loop must stop when its budget is exceeded, a new blocker class appears, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change. This is coordinator guidance only; it does not add checker-enforced budgets or automatic retry behavior.
+
 Choose `integration-bringup` only after confirming that over-splitting would hide the integration seam. The work order must record objective reclassification, runtime topology, allowed actions, forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. This mode remains L0-L2 coordination by default: it does not select tasks, dispatch threads, run commands automatically, grant L3 execution, operate hardware, use credentials, deploy, roll back, or write target projects without explicit user approval in the work order.
 
 Start from `templates/coordination/integration-bringup-work-order.md` when using this mode.
@@ -77,7 +85,7 @@ Use `templates/coordination/coordinator-startup-checklist.md` when a session nee
 
 If `docs/coordination/thread-registry.md` exists, read it during coordinator startup as a manual active-thread context list. Use it to notice owner lanes, workspaces, expected reports, and stale rows; do not use it to rank tasks, assign owners, dispatch threads, or close board items.
 
-When preparing or recommending a new work order, include a dispatch instruction block from `templates/coordination/dispatch-instruction.md`. It should name the target thread or owner lane, workspace, branch, work order, expected report, concurrency mode, file boundary, registry note, and startup sentence. If the target or concurrency mode is unclear, use `ask-user`. If no worker should be started, include a short `No dispatch` reason instead. A `Dispatch note` field in the work order is not a substitute for this final-response handoff.
+When preparing or recommending a new work order, include a dispatch instruction block from `templates/coordination/dispatch-instruction.md`. It should name the target thread or owner lane, workspace, branch, work order, expected report, concurrency mode, granularity decision, file boundary, registry note, and startup sentence. If the target or concurrency mode is unclear, use `ask-user`. If no worker should be started, include a short `No dispatch` reason instead. A `Dispatch note` field in the work order is not a substitute for this final-response handoff.
 
 Interpret the aggregate result conservatively:
 

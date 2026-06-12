@@ -1,6 +1,8 @@
 # Integration Bring-up Work Order
 
-Use this template only when a standard work order would over-split a deploy/start/trigger/observe/classify integration loop. Replace every placeholder before issuing the work order. This template does not grant automatic execution, automatic dispatch, L3 authority, hardware access, credential use, deployment, rollback, or target-project writes by itself.
+Use this template only when a standard work order would over-split a deploy/start/trigger/observe/classify integration loop and lose the causal chain. Replace every placeholder before issuing the work order. This template does not grant automatic execution, automatic dispatch, L3 authority, hardware access, credential use, deployment, rollback, or target-project writes by itself.
+
+Treat the issued integration bring-up work order as the loop contract for the approved manual bring-up loop. The contract is carried by the goal, owner, runtime topology, allowed actions, forbidden actions, bring-up steps, evidence matrix, stop rules, acceptance commands, and return report. Continue only while the loop stays inside those fields; stop when scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
 
 ## Summary
 
@@ -10,6 +12,8 @@ Use this template only when a standard work order would over-split a deploy/star
 - Goal: `{one sentence describing the bring-up objective}`
 - Priority: `{low | normal | high}`
 - Due / checkpoint: `{date or next report point}`
+- Granularity decision: `integration-bringup - {why this needs one bounded deploy/start/trigger/observe/classify evidence chain instead of micro-work-orders}`
+- Evidence value: `integration proof - {why this approved loop proves the causal chain better than proxy evidence}`
 - Dispatch note: `{manual target / workspace / concurrency cue; not a complete dispatch instruction}`
 
 ## Context
@@ -46,7 +50,7 @@ Use this template only when a standard work order would over-split a deploy/star
 ## Bring-up Loop
 
 Run only the approved loop below. Do not add retries or adjacent runtime actions without coordinator or user approval.
-If the work order allows repeated attempts, state the maximum time or attempt budget explicitly. A bounded budget is manual and evidence-gated; it does not authorize automatic retry loops, automatic execution, hardware access, credential use, deployment, rollback, production access, or target-project writes by itself.
+If the work order allows repeated attempts, state the maximum time or attempt budget explicitly. Prefer a small manual fix-test cycle budget over separate micro-work-orders when the same owner, workspace, risk envelope, contract boundary, and evidence gate prove the loop. A bounded budget is manual and evidence-gated; it does not authorize automatic retry loops, automatic execution, hardware access, credential use, deployment, rollback, production access, or target-project writes by itself.
 
 1. Deploy / prepare: `{exact command or manual action, or not applicable}`
 2. Start / activate: `{exact command or manual action, or not applicable}`
@@ -55,6 +59,8 @@ If the work order allows repeated attempts, state the maximum time or attempt bu
 5. Classify: `{source bug | deployment mismatch | runtime failure | device health failure | broker/control issue | observer/UI issue | inconclusive}`
 
 ## Evidence Matrix
+
+Integration bring-up should preserve the causal chain from action to observed result; it should not be split into single-action work orders when the same approval and evidence boundary covers the loop.
 
 | Gate | Source | Result | Scope proven | Remaining gap |
 | --- | --- | --- | --- | --- |
