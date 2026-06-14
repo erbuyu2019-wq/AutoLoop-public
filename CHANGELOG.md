@@ -6,6 +6,7 @@
 
 - Added loop engineering positioning and taxonomy guidance.
 - Added loop contract, manual loop budget, and granularity gate guidance to coordinator prompts and work-order templates.
+- Added tool-neutral review gate, independent review, commit authority, and final acceptance owner guidance.
 
 ## v0.1.1 - 2026-06-05
 

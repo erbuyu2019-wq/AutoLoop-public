@@ -26,6 +26,7 @@ Follow this sequence:
    - dispatch target and concurrency mode, or `not provided`
    - allowed scope
    - forbidden scope
+   - gate authority fields, if present
    - acceptance commands
    - stop conditions
 8. If a provided dispatch instruction conflicts with the work order, current workspace, branch, allowed scope, or registry row, stop and report the mismatch before editing.
@@ -33,15 +34,23 @@ Follow this sequence:
 9. If the work order is ambiguous, touches forbidden scope, requires credentials/private data, changes API/data/security/deployment/runtime behavior, or needs hardware/production access, stop and report instead of editing.
 10. If the boundary is clear, make the smallest change that satisfies the work order.
 11. Run the listed acceptance commands or explain exactly why any command was not run.
-12. Return a report using `worker-report.md`. If a registry row should change, report the proposed row/status update unless the work order explicitly allows direct registry edits.
+12. If the work order has a project-defined or external review gate that needs a capability you do not have, complete the allowed local work, run the allowed verification, and report the gate as deferred to coordinator acceptance or as needing a user decision. Do not block indefinitely, fabricate review evidence, or silently downgrade the gate.
+13. After implementation verification and before writing the report, capture relevant git state and label it as `implementation/code evidence` or `pre-report-commit evidence`.
+    Use `pre-report-commit evidence` when the report itself, or a later report-only correction, may be committed after the evidence was captured.
+    Do not keep refreshing the report just to include a future report-only commit; coordinator final acceptance evidence is captured after the last commit, merge, push, or report-only boundary.
+14. Return a report using `worker-report.md`. Include gate authority status in `Not Verified`, `Risks`, or `Next Suggested Step` when any project-defined or external review, commit, or final acceptance gate remains outside your authority. If a registry row should change, report the proposed row/status update unless the work order explicitly allows direct registry edits.
 
 Constraints:
 
 - Do not modify files outside allowed scope.
 - Do not silently expand public behavior or shared contracts.
 - Do not commit, merge, publish, deploy, or write real credentials.
+- Do not commit unless the work order's commit authority allows it.
 - Do not mark work done if checks failed or were not run.
+- Do not treat a deferred external or project-defined review gate as completed local verification.
+- Do not name or require a specific private review tool unless the target project instructions or work order explicitly name it.
 - Do not treat a dispatch instruction as permission to exceed the work order.
+- Do not amend report-only corrections unless the branch is local, unpublished, worker-owned, and has no shared-history risk; otherwise leave final git evidence to coordinator acceptance or use a separate report-only commit when commits are allowed.
 - Do not edit `docs/coordination/thread-registry.md` unless the work order explicitly allows it.
 - Preserve unrelated user changes.
 ```

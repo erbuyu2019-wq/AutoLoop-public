@@ -15,6 +15,10 @@ Requirements:
    - allowed change scope
    - forbidden scope
    - whether contract changes are allowed
+   - review gate ownership
+   - independent review ownership
+   - commit authority
+   - final acceptance owner
    - acceptance commands
    - stop-and-report conditions
    - any manual loop budget when a timebox or small fix-test cycle budget is useful
@@ -47,6 +51,13 @@ Requirements:
    - Require worker reports to label git evidence as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
    - Do not force the worker report to include its own future report-only commit; coordinator final acceptance git evidence is captured after the last commit, merge, push, or report-only boundary.
    - Mention amend only as conditional: it is acceptable only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
+10. Use tool-neutral gate authority fields:
+   - `Review gate: none | project-defined | external`
+   - `Independent review: not required | worker-authorized | coordinator-owned | required-before-commit`
+   - `Commit authority: no commit | local branch commit allowed | report-only commit allowed | coordinator-only`
+   - `Final acceptance owner: worker | coordinator | user`
+   - Do not name or require a specific private review tool unless the target project's instructions or the user explicitly provide it.
+   - If a worker may lack authority for a project-defined or external review gate, tell the worker to complete allowed local work and report the deferred gate to coordinator acceptance or user decision instead of blocking indefinitely.
 
 Output format:
 
@@ -61,6 +72,7 @@ Output format:
 - Allowed Scope:
 - Forbidden Scope:
 - Required Approach:
+- Gate Authority:
 - Acceptance Commands:
 - Stop and Report If:
 - Return Report:
@@ -77,4 +89,5 @@ Constraints:
 - Do not use one-shot wording as a generic safety substitute; safety comes from exact boundaries, stop rules, and evidence gates.
 - For subagent work orders, prefer short exploration, review, test coverage, or narrow fixes.
 - Do not keep generating proxy-only or planning-only work when the remaining safe next step is implementation/proof, a user decision, or no dispatch.
+- Do not bind AutoLoop work orders to a specific review mechanism or private local route in reusable prompt text.
 ```

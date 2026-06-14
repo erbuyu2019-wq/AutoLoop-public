@@ -34,14 +34,23 @@
 
 ## Required Approach
 
-- Skill / discipline: `<karpathy-baseline | karpathy-deep | systematic-debugging | review-only | other>`
+- Execution discipline: `<baseline implementation | deep investigation | systematic debugging | review-only | project-defined>`
 - Implementation expectation: `<smallest acceptable change>`
 - Contract handling: `<no contract change | pre-report contract impact | follow linked contract>`
 - Secret / private data handling: `<redaction rule or none>`
 
+## Gate Authority
+
+- Review gate: `<none | project-defined | external>`
+- Independent review: `<not required | worker-authorized | coordinator-owned | required-before-commit>`
+- Commit authority: `<no commit | local branch commit allowed | report-only commit allowed | coordinator-only>`
+- Final acceptance owner: `<worker | coordinator | user>`
+
+These fields describe who owns review, commit, and final acceptance gates. They do not grant automatic execution, review routing, commit, merge, release, deployment, or acceptance authority by themselves. Concrete project review mechanisms belong in the target project's instructions or issued work order, not in AutoLoop's reusable template.
+
 ## Work-Order Size Guidance
 
-- Treat the issued work order as the loop contract for one bounded AutoLoop loop. Existing fields carry the contract: `Summary` names goal and owner, `Allowed Scope` and `Forbidden Scope` define the boundary, `Required Approach` defines execution discipline, `Acceptance Commands` define evidence, stop-and-report conditions define interruption points, and `Required Return Report` defines the evidence return path.
+- Treat the issued work order as the loop contract for one bounded AutoLoop loop. Existing fields carry the contract: `Summary` names goal and owner, `Allowed Scope` and `Forbidden Scope` define the boundary, `Required Approach` defines execution discipline, `Gate Authority` defines review/commit/acceptance ownership, `Acceptance Commands` define evidence, stop-and-report conditions define interruption points, and `Required Return Report` defines the evidence return path.
 - A loop may continue only while it stays inside that contract. Stop and report when scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
 - Make the granularity decision before drafting or dispatching. This is a human coordinator judgment, not a checker-enforced schema.
 - A work order should be small enough for one owner, one worktree, and one reviewable evidence bundle.
@@ -97,6 +106,7 @@ Also include:
 - Changed files.
 - Verification commands and results.
 - Contract impact.
+- Gate authority status, including any deferred project-defined or external review gate.
 - Remaining risk or unverified items.
 
 `Dispatch note` is only a planning cue in this work order. The coordinator's final response must still provide a complete manual dispatch instruction block or a short `No dispatch` reason.

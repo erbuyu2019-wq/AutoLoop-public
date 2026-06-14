@@ -39,6 +39,13 @@ Task:
 - State manual loop budgets in plain language when useful, such as a short timebox, a small fix-test cycle budget, or a stop after a named blocker class appears. Do not imply automatic retry behavior or checker-enforced budget counting.
 - State that the loop may continue only while it stays inside its work-order contract, and must stop when scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
 - Include allowed scope, forbidden scope, stop conditions, acceptance commands, dispatch note, and required return report.
+- Include a tool-neutral `Gate Authority` block:
+  - `Review gate: none | project-defined | external`
+  - `Independent review: not required | worker-authorized | coordinator-owned | required-before-commit`
+  - `Commit authority: no commit | local branch commit allowed | report-only commit allowed | coordinator-only`
+  - `Final acceptance owner: worker | coordinator | user`
+- Use project-defined or external review wording only as an abstract gate. Do not name or require a specific private review tool unless the target project's instructions or the user explicitly provide it.
+- If a worker may lack authority for a project-defined or external review gate, state that the worker should complete allowed local work and report the deferred gate to coordinator acceptance or user decision instead of blocking indefinitely.
 - Use `standard` for one bounded implementation, documentation, review, or report task.
 - Use `report-only` for evidence refreshes, readiness audits, investigations, and closeouts that must not edit product/runtime files.
 - Use `integration-bringup` only when deploy/start/trigger/observe/classify steps need to stay in one manual evidence chain; base it on `templates/coordination/integration-bringup-work-order.md`.
@@ -69,6 +76,7 @@ Output:
 - Allowed Scope:
 - Forbidden Scope:
 - Required Approach:
+- Gate Authority:
 - Acceptance Commands:
 - Stop And Report If:
 - Required Return Report:
