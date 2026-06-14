@@ -24,7 +24,7 @@ For the product-level loop-engineering vocabulary that these templates support, 
 - Put trial notes or stage reviews in `docs/trials/`.
 - Copy `templates/coordination/thread-registry.md` to `docs/coordination/thread-registry.md` only when a project needs manual active-thread context. Single-thread projects can omit it.
 - Use `templates/coordination/dispatch-instruction.md` as a manual copy/paste aid after preparing a work order; do not treat it as an automated dispatch record.
-- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `派发指令` block or a short `No dispatch` reason.
+- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `dispatch instruction` block or a short `No dispatch` reason.
 - A work order's `Required Return Report` should name the exact strict report headings and checked summary values. New or active worker reports should pass `check-report.ps1 -Strict` before coordinator acceptance.
 
 ## Loop

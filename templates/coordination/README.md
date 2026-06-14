@@ -23,7 +23,7 @@ These templates onboard a target project into the lightweight AutoLoop coordinat
 - Copy `thread-registry.md` to `docs/coordination/thread-registry.md` only when a project needs manual active-thread context. Single-thread projects can omit it.
 - Use `dispatch-instruction.md` as a manual copy/paste aid after preparing a work order; do not treat it as an automated dispatch record.
 - Use `integration-bringup-work-order.md` only when a standard work order would over-split an approved deploy/start/trigger/observe/classify loop. It is still a manual work order and does not authorize automatic dispatch, automatic execution, hardware access, credential use, deployment, rollback, or target-project writes by itself.
-- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `派发指令` block or a short `No dispatch` reason.
+- `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `dispatch instruction` block or a short `No dispatch` reason.
 
 ## Loop
 
