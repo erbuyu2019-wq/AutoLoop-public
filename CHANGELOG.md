@@ -4,9 +4,22 @@
 
 ### Added
 
+## v0.1.2 - 2026-06-17
+
+### Added
+
+- Added shared strict worker-report validation helpers used by direct report checks and aggregate coordination-state scans.
 - Added loop engineering positioning and taxonomy guidance.
 - Added loop contract, manual loop budget, and granularity gate guidance to coordinator prompts and work-order templates.
 - Added tool-neutral review gate, independent review, commit authority, and final acceptance owner guidance.
+
+### Changed
+
+- Improved public dispatch wording by using the English `dispatch instruction` phrase consistently.
+
+### Boundary
+
+- No daemon, GUI, automatic dispatch, autonomous execution, package publishing, deployment, merge, rollback, credential handling, hardware handling, production behavior, or L3 automation behavior.
 
 ## v0.1.1 - 2026-06-05
 
