@@ -14,6 +14,7 @@ Treat the issued integration bring-up work order as the loop contract for the ap
 - Due / checkpoint: `{date or next report point}`
 - Granularity decision: `integration-bringup - {why this needs one bounded deploy/start/trigger/observe/classify evidence chain instead of micro-work-orders}`
 - Evidence value: `integration proof - {why this approved loop proves the causal chain better than proxy evidence}`
+- Loop budget: `{short timebox | small fix-test cycle budget | stop after named blocker}`
 - Dispatch note: `{manual target / workspace / concurrency cue; not a complete dispatch instruction}`
 
 ## Context

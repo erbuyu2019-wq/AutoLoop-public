@@ -4,6 +4,26 @@
 
 ### Added
 
+## v0.1.3 - 2026-06-17
+
+### Added
+
+- Added a generic single-owner greenfield example with matching work-order, worker-report, and work-result checks.
+- Added public anti-pattern guidance for local-readiness misuse, incomplete dispatch handoffs, over-split feedback loops, and private-tool coupling.
+- Added a target-project `AGENTS.md` starter template for mapping project-defined review, commit, and acceptance gates.
+- Added focused Pester tests for shared checker values and worker-report validation helpers.
+
+### Changed
+
+- Replaced outdated real-project example links in the README with public-safe generic examples.
+- Documented Windows PowerShell 5.1, Git, and Pester 3.4.0 as the supported runtime baseline.
+- Made `Loop budget` explicit in work-order templates and drafting prompts while keeping it as human coordinator guidance.
+- Extended repository verification to cover the new single-owner greenfield example.
+
+### Boundary
+
+- No daemon, GUI, automatic dispatch, autonomous execution, package publishing, deployment, merge, rollback, credential handling, hardware handling, production behavior, private review-tool dependency, or L3 automation behavior.
+
 ## v0.1.2 - 2026-06-17
 
 ### Added

@@ -21,7 +21,7 @@ Requirements:
    - final acceptance owner
    - acceptance commands
    - stop-and-report conditions
-   - any manual loop budget when a timebox or small fix-test cycle budget is useful
+   - `Loop budget` as `none` or a manual timebox / small fix-test cycle budget when useful
 4. Keep each work order short and specific. Do not output long design notes.
 5. If a task triggers `gates.md`, do not generate an execution work order. Generate a user-decision summary instead.
 6. Apply the Granularity Gate before drafting each work order:
@@ -40,18 +40,18 @@ Requirements:
    - Useful feedback chains include `edit-test-observe`, `hypothesis-fix-verify`, `deploy-start-trigger-observe-classify`, and `evidence-refresh-review`.
    - Split work orders only when owners, workspaces or worktrees, risk levels, contract boundaries, acceptance gates, user approval requirements, or evidence types differ enough that one report would blur responsibility or safety.
    - Treat this as coordinator guidance only; do not invent checker rules that infer correct work-order size.
-8. Preserve bounded execution latitude:
+9. Preserve bounded execution latitude:
    - Keep allowed scope, forbidden scope, stop rules, credentials, hardware, production, deployment, rollback, destructive actions, and contract-impact boundaries strict.
    - Treat the issued work order as the loop contract for one bounded loop; existing fields define the goal/owner, boundary, approach, evidence, stop points, and return report.
    - Do not default to one-shot or one-attempt limits for low-risk local docs, implementation, edit-test, or observe loops.
    - Use explicit one-attempt limits only for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or an explicit user/work-order requirement.
    - Prefer a timebox or small fix-test cycle budget over micro-work-orders when an approved debugging or integration loop must keep edit/deploy/start/trigger/observe/classify steps together.
    - Stop the loop when the manual budget is exceeded, a new blocker class appears, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
-9. For report-only work orders, evidence refreshes, or likely report-only corrections:
+10. For report-only work orders, evidence refreshes, or likely report-only corrections:
    - Require worker reports to label git evidence as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
    - Do not force the worker report to include its own future report-only commit; coordinator final acceptance git evidence is captured after the last commit, merge, push, or report-only boundary.
    - Mention amend only as conditional: it is acceptable only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
-10. Use tool-neutral gate authority fields:
+11. Use tool-neutral gate authority fields:
    - `Review gate: none | project-defined | external`
    - `Independent review: not required | worker-authorized | coordinator-owned | required-before-commit`
    - `Commit authority: no commit | local branch commit allowed | report-only commit allowed | coordinator-only`
@@ -68,6 +68,7 @@ Output format:
 - Fast lane:
 - Evidence value:
 - Planning depth:
+- Loop budget:
 - Goal:
 - Allowed Scope:
 - Forbidden Scope:

@@ -11,6 +11,7 @@
 - Fast lane: `<yes | no> - <short reason>`
 - Evidence value: `<direct product proof | runtime proof | integration proof | proxy evidence | planning evidence> - <short reason>`
 - Planning depth: `<implementation/proof next | user decision | no dispatch | more planning justified> - <short reason>`
+- Loop budget: `<none | short timebox | small fix-test cycle budget | stop after named blocker>`
 - Dispatch note: `none` or brief target / workspace / concurrency cue; this is not a complete manual dispatch instruction
 
 ## Context

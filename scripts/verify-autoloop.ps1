@@ -294,6 +294,39 @@ Invoke-AutoLoopStep -Name "Run work result check" -Action {
     )
 }
 
+Invoke-AutoLoopStep -Name "Run single-owner greenfield example checks" -Action {
+    Invoke-ExternalCommand -FilePath "powershell" -Arguments @(
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts\coordination\check-work-order.ps1",
+        "-WorkOrderPath",
+        "docs\examples\single-owner-greenfield\work-order.md"
+    )
+    Invoke-ExternalCommand -FilePath "powershell" -Arguments @(
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts\coordination\check-report.ps1",
+        "-ReportPath",
+        "docs\examples\single-owner-greenfield\reports\worker-report.md",
+        "-Strict"
+    )
+    Invoke-ExternalCommand -FilePath "powershell" -Arguments @(
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts\coordination\check-work-result.ps1",
+        "-WorkOrderPath",
+        "docs\examples\single-owner-greenfield\work-order.md",
+        "-ReportPath",
+        "docs\examples\single-owner-greenfield\reports\worker-report.md"
+    )
+}
+
 Invoke-AutoLoopStep -Name "Run integration review check" -Action {
     Invoke-ExternalCommand -FilePath "powershell" -Arguments @(
         "-NoProfile",

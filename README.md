@@ -5,6 +5,14 @@ AutoLoop is a lightweight coordination workflow for Codex App based development.
 AutoLoop is not a background daemon, GUI, project management database, autonomous coding robot, or replacement for a target project's own `AGENTS.md`, tests, OpenSpec, CI, release process, or human approval gates.
 
 For product positioning and loop taxonomy, see `docs/loop-engineering.md`.
+For common misuse patterns, see `docs/anti-patterns.md`.
+
+## Requirements
+
+- Windows with Windows PowerShell 5.1 is the supported runtime.
+- Git must be available on `PATH` for repository and worktree status checks.
+- The test suite currently uses Pester 3.4.0; GitHub Actions installs this version explicitly.
+- PowerShell 7, macOS, and Linux are not yet claimed as fully supported. Some library functions may be portable, but the full verifier and command examples are Windows-first.
 
 ## When To Use It
 
@@ -29,9 +37,10 @@ See `docs/onboarding-modes.md` for details.
 
 Pattern examples:
 
-- `docs/examples/livox-greenfield.md`
-- `docs/examples/laserradar-brownfield.md`
+- `docs/examples/single-owner-greenfield/`
 - `docs/examples/multi-owner-smoke/`
+
+When adopting AutoLoop in a target project, use `templates/project-agents-template.md` as a starting point for that project's `AGENTS.md` mapping.
 
 Preview onboarding first:
 
@@ -150,6 +159,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\coordination\check-i
   -WorkOrderPath <work-order.md> `
   -ReportPaths <app-report.md>,<device-report.md>,<workbench-report.md> `
   -ExpectedOwners app,device,workbench
+
+# Check the single-owner greenfield example
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\coordination\check-work-result.ps1 `
+  -WorkOrderPath docs\examples\single-owner-greenfield\work-order.md `
+  -ReportPath docs\examples\single-owner-greenfield\reports\worker-report.md
 
 # Run AutoLoop repository verification
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-autoloop.ps1
