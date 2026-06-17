@@ -6,6 +6,7 @@ AutoLoop is not a background daemon, GUI, project management database, autonomou
 
 For product positioning and loop taxonomy, see `docs/loop-engineering.md`.
 For common misuse patterns, see `docs/anti-patterns.md`.
+For private/public changelog and release-note boundaries, see `docs/release-boundaries.md`.
 
 ## Requirements
 

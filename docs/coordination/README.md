@@ -3,6 +3,7 @@
 These templates onboard a target project into the lightweight AutoLoop coordination protocol. The coordinator uses them to maintain a short board, create work orders, review worker reports, and decide when user approval is required.
 
 For the product-level loop-engineering vocabulary that these templates support, see `../loop-engineering.md`.
+For private/public changelog, release-note, and public-export evidence boundaries, see `../release-boundaries.md`.
 
 ## Files
 
