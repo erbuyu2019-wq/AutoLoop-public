@@ -12,6 +12,7 @@
 - Evidence value: `<direct product proof | runtime proof | integration proof | proxy evidence | planning evidence> - <short reason>`
 - Planning depth: `<implementation/proof next | user decision | no dispatch | more planning justified> - <short reason>`
 - Loop budget: `<none | short timebox | small fix-test cycle budget | stop after named blocker>`
+- Integration baseline policy: `<dispatch-base acceptable | refresh-before-merge | batch-baseline | current-integration required | not applicable> - <short reason>`
 - Dispatch note: `none` or brief target / workspace / concurrency cue; this is not a complete manual dispatch instruction
 
 ## Context
@@ -48,6 +49,18 @@
 - Final acceptance owner: `<worker | coordinator | user>`
 
 These fields describe who owns review, commit, and final acceptance gates. They do not grant automatic execution, review routing, commit, merge, release, deployment, or acceptance authority by themselves. Concrete project review mechanisms belong in the target project's instructions or issued work order, not in AutoLoop's reusable template.
+
+## Integration Baseline Guidance
+
+- Use `dispatch-base acceptable` when branch-local readiness against the dispatch/base commit is enough for the worker; the coordinator owns final integration verification.
+- Use `refresh-before-merge` when one bounded refresh and revalidation is expected near acceptance, but workers should not repeatedly rebase and rerun expensive checks after unrelated integration-branch movement.
+- Use `batch-baseline` when the coordinator defines one shared baseline for a group of ready branches and reviews the batch together.
+- Use `current-integration required` only for high-risk work, overlapping files, shared contracts, config, schemas, tests, runtime or deployment behavior, release, hardware, production paths, or explicit user/coordinator requirements.
+- Workers should record the dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status in the worker report.
+- Workers do not chase every `master` or `main` movement by default. The coordinator performs drift-impact review before requesting expensive refresh work.
+- Request a worker refresh only when drift can invalidate evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release/hardware/production paths, or explicit current-integration proof.
+- Branch-local worker evidence and coordinator final integration-branch evidence are separate layers. The coordinator records final integration proof after merge, batch receive, push, or report-only boundary.
+- This is human coordination guidance only; do not add checker-enforced freshness rules, automatic merge queues, automatic branch locking, automatic task selection, or automatic dispatch.
 
 ## Work-Order Size Guidance
 

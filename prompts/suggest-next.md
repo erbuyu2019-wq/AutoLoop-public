@@ -30,6 +30,7 @@ Task:
   - Fast lane: state whether same-owner, same-worktree, same-objective, same-risk, same-contract, same-evidence-gate work can stay in one bounded implementation/local verification/report bundle.
   - Planning depth: if recent work for the same objective is already mostly planning or proxy evidence, favor implementation/proof, a user decision, or `no dispatch` over another proxy/planning task.
   - Loop budget: when a same-boundary feedback loop needs iteration, suggest a manual timebox or small fix-test cycle budget and stop conditions instead of automatic retry behavior or micro-work-orders.
+  - Integration baseline policy: for parallel branches, suggest `dispatch-base acceptable`, `refresh-before-merge`, `batch-baseline`, `current-integration required`, or `not applicable`, and explain drift-impact risk.
   - Treat this as read-only coordinator judgment; do not add checker rules, automatic selection, or exhaustive history counting.
 
 Output:
@@ -52,6 +53,7 @@ Output:
    - Evidence value:
    - Planning depth:
    - Loop budget:
+   - Integration baseline policy:
 
 ## Draft Work Orders
 
@@ -71,4 +73,5 @@ Constraints:
 - If missing evidence can be repaired inside the same owner/workspace/objective/risk/contract/evidence boundary, prefer same-boundary evidence repair over a new micro-work-order.
 - Do not use fast lane for credentials, hardware, live targets, production, deployment, release, rollback, private captures, schema/contract changes, or cross-owner integration closure.
 - Do not turn manual loop budgets into automatic retry, automatic execution, checker-enforced budget counting, or permission to exceed stop conditions.
+- Do not suggest refresh work solely because `master` or `main` moved; identify the drift impact first.
 ```

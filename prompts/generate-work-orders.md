@@ -22,6 +22,7 @@ Requirements:
    - acceptance commands
    - stop-and-report conditions
    - `Loop budget` as `none` or a manual timebox / small fix-test cycle budget when useful
+   - `Integration baseline policy` as `dispatch-base acceptable`, `refresh-before-merge`, `batch-baseline`, `current-integration required`, or `not applicable`
 4. Keep each work order short and specific. Do not output long design notes.
 5. If a task triggers `gates.md`, do not generate an execution work order. Generate a user-decision summary instead.
 6. Apply the Granularity Gate before drafting each work order:
@@ -58,6 +59,13 @@ Requirements:
    - `Final acceptance owner: worker | coordinator | user`
    - Do not name or require a specific private review tool unless the target project's instructions or the user explicitly provide it.
    - If a worker may lack authority for a project-defined or external review gate, tell the worker to complete allowed local work and report the deferred gate to coordinator acceptance or user decision instead of blocking indefinitely.
+12. For parallel branch acceptance:
+   - Default to `dispatch-base acceptable` when branch-local readiness against the dispatch/base commit is enough and the coordinator will own final integration proof.
+   - Use `refresh-before-merge` for one bounded refresh/revalidation near acceptance, not unlimited rebases after unrelated `master` or `main` movement.
+   - Use `batch-baseline` when several ready branches share a coordinator-defined acceptance baseline.
+   - Use `current-integration required` only for high-risk work, overlapping files, shared contracts, config, schemas, tests, runtime/deployment behavior, release, hardware, production paths, or explicit requirements.
+   - Require worker reports to record dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
+   - Do not add checker-enforced freshness rules, automatic branch locking, automatic merge queues, automatic task selection, or automatic dispatch.
 
 Output format:
 
@@ -69,6 +77,7 @@ Output format:
 - Evidence value:
 - Planning depth:
 - Loop budget:
+- Integration baseline policy:
 - Goal:
 - Allowed Scope:
 - Forbidden Scope:

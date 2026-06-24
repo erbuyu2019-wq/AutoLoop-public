@@ -54,6 +54,19 @@ Treat each issued work order as the loop contract for one bounded AutoLoop loop.
 
 Use `Gate Authority` fields to keep review, commit, and final acceptance ownership explicit without binding AutoLoop to a specific review tool. A project may map its own review mechanism to `project-defined` or `external`, but AutoLoop's reusable templates should stay tool-neutral. If a worker lacks authority to run a project-defined or external gate, the worker should complete allowed local work, report the deferred gate, and hand the decision back to the coordinator or user.
 
+## Parallel Branch Baselines
+
+Use an `Integration baseline policy` when more than one worker branch may be active at the same time:
+
+- `dispatch-base acceptable`: branch-local readiness against the dispatch/base commit is acceptable; coordinator owns final integration verification.
+- `refresh-before-merge`: one bounded refresh/revalidation is expected near acceptance, but workers should not repeatedly rebase and rerun expensive checks after unrelated integration-branch movement.
+- `batch-baseline`: the coordinator defines one shared acceptance baseline for multiple ready branches.
+- `current-integration required`: the worker must prove against current `master` or `main` because the work is high risk, overlaps files, changes shared contracts, config, schemas, tests, runtime/deployment behavior, release, hardware, production paths, or has an explicit current-integration requirement.
+
+Worker reports should record the dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status. Workers do not chase every `master` or `main` movement by default. The coordinator performs drift-impact review before requesting expensive refresh work and asks for refresh only when drift can invalidate the evidence. Branch-local worker evidence and final accepted integration-branch evidence are different layers; coordinator final acceptance records final proof after merge, batch receive, push, or report-only boundary.
+
+This guidance is manual L0-L2 coordination. It does not add checker-enforced git freshness, automatic merge queues, automatic branch locks, automatic task selection, automatic dispatch, or Codex Desktop thread control.
+
 Choose `integration-bringup` only after confirming that over-splitting would hide the integration seam. The work order must record objective reclassification, runtime topology, allowed actions, forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. This mode remains L0-L2 coordination by default: it does not select tasks, dispatch threads, run commands automatically, grant L3 execution, operate hardware, use credentials, deploy, roll back, or write target projects without explicit user approval in the work order.
 
 Start from `templates/coordination/integration-bringup-work-order.md` when using this mode.

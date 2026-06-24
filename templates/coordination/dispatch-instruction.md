@@ -14,6 +14,8 @@ Dispatch instruction
 - Work order: [path]
 - Expected report: [path]
 - Concurrency: [exclusive-write | shared-read-only | report-only | ask-user]
+- Granularity decision: [bounded bundle | split work orders | report-only | integration-bringup | no dispatch] - [short reason]
+- Integration baseline policy: [dispatch-base acceptable | refresh-before-merge | batch-baseline | current-integration required | not applicable] - [short reason]
 - File boundary: [key allowed / forbidden scope]
 - Registry: [suggested row update, or none]
 - Startup sentence: Execute this work order as an AutoLoop worker; restate the boundary before editing files.
@@ -44,6 +46,8 @@ Dispatch instruction
 - Work order: docs/coordination/work-orders/T-XXX-manual-docs-change.md
 - Expected report: docs/coordination/reports/T-XXX-worker-report.md
 - Concurrency: exclusive-write
+- Granularity decision: bounded bundle - same docs owner, workspace, objective, risk envelope, and evidence gate.
+- Integration baseline policy: not applicable - docs-only change on the current checkout.
 - File boundary: Only edit docs/templates/prompts/report files listed in the work order Allowed Scope; do not edit scripts, checkers, tests, or target projects.
 - Registry: none
 - Startup sentence: Execute this work order as an AutoLoop worker; restate the boundary before editing files.
@@ -57,6 +61,8 @@ Dispatch instruction
 - Work order: docs/coordination/work-orders/T-YYY-report-review.md
 - Expected report: docs/coordination/reports/T-YYY-worker-report.md
 - Concurrency: shared-read-only
+- Granularity decision: report-only - current need is evidence review, not implementation.
+- Integration baseline policy: dispatch-base acceptable - review branch-local evidence first; coordinator owns final integration proof.
 - File boundary: Read-only check of board, work-order, report, and git state; do not edit product code, credentials, deployment config, or board status.
 - Registry: If a relevant row exists, report suggested status; do not edit registry directly.
 - Startup sentence: Execute this work order as an AutoLoop worker; restate the boundary before editing files.

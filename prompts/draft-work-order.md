@@ -40,6 +40,9 @@ Task:
 - State that the loop may continue only while it stays inside its work-order contract, and must stop when scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
 - Include allowed scope, forbidden scope, stop conditions, acceptance commands, dispatch note, and required return report.
 - Include `Loop budget` in the summary. Use `none` for ordinary one-pass work; use a short timebox or small fix-test cycle budget only when a same-boundary feedback loop should stay together.
+- Include `Integration baseline policy` in the summary. Use `dispatch-base acceptable` for branch-local readiness against the dispatch/base commit, `refresh-before-merge` for one bounded refresh near acceptance, `batch-baseline` for a coordinator-defined shared acceptance batch, `current-integration required` when current `master`/`main` proof is needed, or `not applicable`.
+- Require `current-integration required` only for high-risk work, overlapping files, shared contracts, config, schemas, tests, runtime/deployment behavior, release, hardware, production paths, or explicit user/coordinator requirements.
+- When drift is possible, tell the worker to record dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status without automatically rebasing after every unrelated integration-branch movement.
 - Include a tool-neutral `Gate Authority` block:
   - `Review gate: none | project-defined | external`
   - `Independent review: not required | worker-authorized | coordinator-owned | required-before-commit`
@@ -59,6 +62,7 @@ Task:
 - For report-only work orders, evidence refreshes, or likely report-only corrections, require the worker report to label git evidence as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
 - Do not force a worker report to include its own future report-only commit. If the report changes HEAD after verification, coordinator final acceptance git evidence belongs to coordinator acceptance or closeout after the last commit, merge, push, or report-only boundary.
 - Include conditional amend wording only when useful: amend a report-only correction into the latest local commit only if the branch is local, unpublished, worker-owned, and has no shared-history risk; otherwise use a separate report-only commit or leave final git evidence to the coordinator.
+- State that branch-local worker evidence and final integration-branch evidence are separate layers; coordinator final acceptance records the final integration proof after merge, batch receive, push, or report-only boundary.
 - If the request triggers a user gate, do not draft an execution work order. Output a user-decision summary instead.
 
 Output:
@@ -73,6 +77,7 @@ Output:
 - Evidence value:
 - Planning depth:
 - Loop budget:
+- Integration baseline policy:
 - Goal:
 - Dispatch note:
 - Allowed Scope:

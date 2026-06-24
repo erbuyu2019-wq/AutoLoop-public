@@ -6,6 +6,10 @@
 
 - Added public guidance for keeping private coordination history, public changelog entries, release notes, and public-export sync evidence separate.
 
+### Changed
+
+- Clarified parallel branch baseline and drift-impact guidance so workers can report branch-local readiness while coordinators own final integration proof.
+
 ## v0.1.3 - 2026-06-17
 
 ### Added
