@@ -9,6 +9,7 @@
 ### Changed
 
 - Clarified parallel branch baseline and drift-impact guidance so workers can report branch-local readiness while coordinators own final integration proof.
+- Clarified report-only HEAD drift guidance so coordinators capture final acceptance git evidence instead of sending workers into self-referential report refresh loops.
 
 ## v0.1.3 - 2026-06-17
 

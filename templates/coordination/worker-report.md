@@ -33,6 +33,8 @@ Git evidence boundary guidance:
 - Use `pre-report-commit evidence` when the worker report itself, or a later report-only correction, may be committed after the evidence was captured.
 - Use `coordinator final acceptance evidence` only for final git state captured by the coordinator after the last commit, merge, push, or report-only boundary.
 - A worker report does not need to chase its own future report-only commit. If the report changes HEAD, the coordinator captures final acceptance evidence after that boundary.
+- Report-only HEAD drift is not a default worker refresh trigger. If only the worker report or a report-only correction changed after implementation verification, keep `implementation/code evidence` separate from coordinator final acceptance evidence instead of rerunning expensive checks.
+- Request worker refresh only when material drift can invalidate implementation evidence, such as overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release/hardware/production paths, explicit current-integration proof, or a work-order requirement.
 - Amending a report-only correction into the latest local commit is acceptable only when the branch is local, unpublished, owned by the worker, and has no shared-history risk. Otherwise use a separate report-only commit or leave final git evidence to coordinator acceptance. Do not require amend as the default.
 
 Integration branch baseline guidance:

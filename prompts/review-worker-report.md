@@ -31,7 +31,7 @@ Check:
 18. If the chain already has enough planning or proxy evidence for the same objective, prefer direct product, runtime, or integration proof, a user decision, or `no dispatch` over another proxy/planning task.
 19. Decide whether Fast Lane still applies for same-owner, same-worktree, same-objective, same-risk, same-contract, same-evidence-gate repair, while keeping hard user gates strict.
 20. Check whether any git evidence is labeled as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
-21. If a worker report changed after implementation verification, do not require the worker to chase its own future report-only commit. The coordinator captures final acceptance git evidence after the last commit, merge, push, or report-only boundary.
+21. If a worker report or report-only correction changed after implementation verification, treat that as report-only HEAD drift. Do not require the worker to chase its own future report-only commit or rerun expensive checks solely for that drift.
 22. For coordinator final acceptance, run or request:
     `git status --short --branch`
     `git rev-parse --short HEAD`
@@ -40,7 +40,7 @@ Check:
 23. Check whether the worker stayed inside the work order as the loop contract: goal/owner, allowed and forbidden scope, required approach, gate authority, acceptance commands, stop-and-report conditions, and required return report.
 24. If the work order had a manual loop budget, check whether the report stayed within it or stopped when the budget was exceeded, a new blocker class appeared, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions changed.
 25. If the work order had an integration baseline policy, check that the report records dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
-26. Perform drift-impact review before requesting a worker refresh. Request refresh only when drift can invalidate evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, or explicit current-integration proof.
+26. Perform material drift review before requesting a worker refresh. Request refresh only when drift can invalidate implementation evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement.
 27. Keep branch-local worker evidence separate from coordinator final integration proof. If accepting a merge, batch receive, push, or report-only boundary, record final integration proof after that boundary.
 
 Output format:
@@ -56,6 +56,7 @@ Output format:
 - Unverified risk:
 - Gate authority:
 - Git evidence boundary:
+- Report-only HEAD drift:
 - Integration baseline / drift impact:
 - Coordinator final git checks:
 - Loop contract:
@@ -92,6 +93,7 @@ Constraints:
 - Do not convert same-boundary evidence repair into another proxy-only or planning-only task when direct proof is available.
 - Do not require amend as the default. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
 - Do not treat pre-report-commit evidence as proof of the final accepted git state after coordinator commits, merges, pushes, or report-only changes.
+- Do not send work back for self-referential report refresh solely because the report-only commit moved HEAD; capture final git state in coordinator acceptance or closeout.
 - Do not turn manual loop budgets into checker-enforced counting or automatic retry behavior.
 - Do not require workers to chase every unrelated `master` or `main` movement. Require current-integration proof only when the work order demands it or drift impact can invalidate the worker evidence.
 ```

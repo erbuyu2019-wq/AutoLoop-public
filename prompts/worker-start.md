@@ -38,6 +38,7 @@ Follow this sequence:
 13. After implementation verification and before writing the report, capture relevant git state and label it as `implementation/code evidence` or `pre-report-commit evidence`.
     Use `pre-report-commit evidence` when the report itself, or a later report-only correction, may be committed after the evidence was captured.
     Do not keep refreshing the report just to include a future report-only commit; coordinator final acceptance evidence is captured after the last commit, merge, push, or report-only boundary.
+    If only report text changed after implementation verification, mark it as report-only HEAD drift and keep implementation/code evidence separate from final acceptance evidence instead of rerunning expensive checks.
 14. If the work order names an integration baseline policy, record dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status. Do not rebase or rerun expensive checks after every unrelated `master` or `main` movement unless the work order says `current-integration required`, the coordinator requests a refresh, or drift can invalidate evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, or explicit current-integration proof.
 15. Return a report using `worker-report.md`. Include gate authority status in `Not Verified`, `Risks`, or `Next Suggested Step` when any project-defined or external review, commit, or final acceptance gate remains outside your authority. If a registry row should change, report the proposed row/status update unless the work order explicitly allows direct registry edits.
 
@@ -52,6 +53,7 @@ Constraints:
 - Do not name or require a specific private review tool unless the target project instructions or work order explicitly name it.
 - Do not treat a dispatch instruction as permission to exceed the work order.
 - Do not amend report-only corrections unless the branch is local, unpublished, worker-owned, and has no shared-history risk; otherwise leave final git evidence to coordinator acceptance or use a separate report-only commit when commits are allowed.
+- Do not treat report-only HEAD drift as a default worker refresh trigger; refresh only when material drift can invalidate implementation evidence or the work order/coordinator explicitly requires it.
 - Do not treat branch-local readiness as coordinator final integration proof; those are separate evidence layers.
 - Do not edit `docs/coordination/thread-registry.md` unless the work order explicitly allows it.
 - Preserve unrelated user changes.

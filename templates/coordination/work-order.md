@@ -62,6 +62,16 @@ These fields describe who owns review, commit, and final acceptance gates. They 
 - Branch-local worker evidence and coordinator final integration-branch evidence are separate layers. The coordinator records final integration proof after merge, batch receive, push, or report-only boundary.
 - This is human coordination guidance only; do not add checker-enforced freshness rules, automatic merge queues, automatic branch locking, automatic task selection, or automatic dispatch.
 
+## Report-Only HEAD Drift Guidance
+
+- A worker report or report-only correction may move `HEAD` after implementation/code verification was captured.
+- That report-only movement is not, by itself, a reason to ask the worker to refresh the report again or rerun expensive checks.
+- Coordinator acceptance owns final `HEAD`, integration branch, divergence, status, and log evidence after the last report-only commit, merge, push, or acceptance boundary.
+- If only report text changed after verification, mark it as report-only drift and keep implementation/code evidence separate from final acceptance evidence.
+- Request worker refresh only when material drift can invalidate implementation evidence, such as overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release/hardware/production paths, explicit current-integration proof, or a work-order requirement.
+- Do not require amend as the default. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
+- This is human coordination guidance only; do not add checker-enforced git freshness, automatic amend/rebase behavior, automatic refresh rules, or history rewriting.
+
 ## Work-Order Size Guidance
 
 - Treat the issued work order as the loop contract for one bounded AutoLoop loop. Existing fields carry the contract: `Summary` names goal and owner, `Allowed Scope` and `Forbidden Scope` define the boundary, `Required Approach` defines execution discipline, `Gate Authority` defines review/commit/acceptance ownership, `Acceptance Commands` define evidence, stop-and-report conditions define interruption points, and `Required Return Report` defines the evidence return path.

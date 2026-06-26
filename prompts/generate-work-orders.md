@@ -51,6 +51,7 @@ Requirements:
 10. For report-only work orders, evidence refreshes, or likely report-only corrections:
    - Require worker reports to label git evidence as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
    - Do not force the worker report to include its own future report-only commit; coordinator final acceptance git evidence is captured after the last commit, merge, push, or report-only boundary.
+   - State that report-only HEAD drift alone is not a worker refresh trigger; request refresh only when material drift can invalidate implementation evidence or the work order explicitly requires it.
    - Mention amend only as conditional: it is acceptable only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
 11. Use tool-neutral gate authority fields:
    - `Review gate: none | project-defined | external`

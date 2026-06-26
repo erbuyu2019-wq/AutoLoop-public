@@ -67,6 +67,14 @@ Worker reports should record the dispatch/base commit, verified branch HEAD, obs
 
 This guidance is manual L0-L2 coordination. It does not add checker-enforced git freshness, automatic merge queues, automatic branch locks, automatic task selection, automatic dispatch, or Codex Desktop thread control.
 
+## Report-Only HEAD Drift
+
+A worker report or report-only correction can move `HEAD` after implementation/code verification was captured. That report-only movement is not a default reason to send the worker back to refresh the report again or rerun expensive checks. Label the worker's evidence timing as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence` when git state matters.
+
+Coordinator acceptance owns final `HEAD`, integration branch, divergence, status, and log evidence after the last report-only commit, merge, push, or acceptance boundary. If only report text changed after verification, mark it as report-only drift and keep implementation/code evidence separate from final acceptance evidence. Ask the worker to refresh only when material drift can invalidate implementation evidence, such as overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release/hardware/production paths, explicit current-integration proof, or a work-order requirement.
+
+Do not require amend as the default solution. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk. Otherwise use a separate report-only commit if commits are allowed, or leave final git evidence to coordinator acceptance.
+
 Choose `integration-bringup` only after confirming that over-splitting would hide the integration seam. The work order must record objective reclassification, runtime topology, allowed actions, forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. This mode remains L0-L2 coordination by default: it does not select tasks, dispatch threads, run commands automatically, grant L3 execution, operate hardware, use credentials, deploy, roll back, or write target projects without explicit user approval in the work order.
 
 Start from `templates/coordination/integration-bringup-work-order.md` when using this mode.
