@@ -32,16 +32,23 @@ Check:
 19. Decide whether Fast Lane still applies for same-owner, same-worktree, same-objective, same-risk, same-contract, same-evidence-gate repair, while keeping hard user gates strict.
 20. Check whether any git evidence is labeled as `implementation/code evidence`, `pre-report-commit evidence`, or `coordinator final acceptance evidence`.
 21. If a worker report or report-only correction changed after implementation verification, treat that as report-only HEAD drift. Do not require the worker to chase its own future report-only commit or rerun expensive checks solely for that drift.
-22. For coordinator final acceptance, run or request:
+22. Apply the coordinator final git evidence decision matrix:
+    - `uncommitted implementation package`: if source, tests, work order, or worker report are still uncommitted and the work order permits worker commits, returning to the worker to commit the current package is normal.
+    - `clean committed package with stale report evidence`: if the branch/worktree is clean, required checks passed, the package is committed, and only the worker report's HEAD/integration/divergence/log evidence is stale, capture final git evidence in coordinator review or closeout instead of asking the worker to rewrite the report.
+    - `dirty worktree or post-verification source/test changes`: if source, tests, config, runtime behavior, or other implementation files changed after verification, return to the worker for repair or revalidation.
+    - `material integration drift`: if drift can invalidate evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement, request a bounded refresh or coordinator/user decision.
+23. For coordinator final acceptance, run or request:
     `git status --short --branch`
     `git rev-parse --short HEAD`
-    `git rev-list --left-right --count master...HEAD`
+    `git rev-parse --short master` or `git rev-parse --short main`
+    `git rev-list --left-right --count master...HEAD` or `git rev-list --left-right --count main...HEAD`
     `git log --oneline -5`
-23. Check whether the worker stayed inside the work order as the loop contract: goal/owner, allowed and forbidden scope, required approach, gate authority, acceptance commands, stop-and-report conditions, and required return report.
-24. If the work order had a manual loop budget, check whether the report stayed within it or stopped when the budget was exceeded, a new blocker class appeared, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions changed.
-25. If the work order had an integration baseline policy, check that the report records dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
-26. Perform material drift review before requesting a worker refresh. Request refresh only when drift can invalidate implementation evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement.
-27. Keep branch-local worker evidence separate from coordinator final integration proof. If accepting a merge, batch receive, push, or report-only boundary, record final integration proof after that boundary.
+24. If the coordinator has repository/worktree access, run final git checks directly instead of requesting a worker refresh solely to make the worker report include final HEAD. If the coordinator cannot access the worktree, ask for one concise final git-state handoff rather than a full report rewrite, unless material drift or failed checks require worker repair.
+25. Check whether the worker stayed inside the work order as the loop contract: goal/owner, allowed and forbidden scope, required approach, gate authority, acceptance commands, stop-and-report conditions, and required return report.
+26. If the work order had a manual loop budget, check whether the report stayed within it or stopped when the budget was exceeded, a new blocker class appeared, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions changed.
+27. If the work order had an integration baseline policy, check that the report records dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
+28. Perform material drift review before requesting a worker refresh. Request refresh only when drift can invalidate implementation evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement.
+29. Keep branch-local worker evidence separate from coordinator final integration proof. If accepting a merge, batch receive, push, or report-only boundary, record final integration proof after that boundary.
 
 Output format:
 
@@ -57,6 +64,7 @@ Output format:
 - Gate authority:
 - Git evidence boundary:
 - Report-only HEAD drift:
+- Coordinator final git evidence default:
 - Integration baseline / drift impact:
 - Coordinator final git checks:
 - Loop contract:
@@ -94,6 +102,7 @@ Constraints:
 - Do not require amend as the default. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
 - Do not treat pre-report-commit evidence as proof of the final accepted git state after coordinator commits, merges, pushes, or report-only changes.
 - Do not send work back for self-referential report refresh solely because the report-only commit moved HEAD; capture final git state in coordinator acceptance or closeout.
+- Do not return a clean committed package to the worker only because the worker report's git evidence is stale; coordinator final git evidence capture is the default acceptance path.
 - Do not turn manual loop budgets into checker-enforced counting or automatic retry behavior.
 - Do not require workers to chase every unrelated `master` or `main` movement. Require current-integration proof only when the work order demands it or drift impact can invalidate the worker evidence.
 ```

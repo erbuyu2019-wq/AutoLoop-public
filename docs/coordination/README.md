@@ -75,6 +75,12 @@ Coordinator acceptance owns final `HEAD`, integration branch, divergence, status
 
 Do not require amend as the default solution. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk. Otherwise use a separate report-only commit if commits are allowed, or leave final git evidence to coordinator acceptance.
 
+## Coordinator Final Git Evidence
+
+For a clean committed package with stale worker-report git evidence, coordinator final git evidence capture is the default acceptance path. If the branch or worktree is clean, required checks passed, the package is committed, and only the worker report's `HEAD`, integration-branch, divergence, or recent-log evidence is stale, the coordinator records final git state in review notes or closeout instead of returning the worker to rewrite the report.
+
+Returning to the worker is still normal when the implementation package is uncommitted and the work order permits worker commits. Return for repair or revalidation when the worktree is dirty, source/tests/config/runtime behavior changed after verification, checks failed, or material integration drift can invalidate the implementation evidence. If the coordinator cannot access the worker worktree, ask for one concise final git-state handoff rather than a full report rewrite unless repair is needed.
+
 Choose `integration-bringup` only after confirming that over-splitting would hide the integration seam. The work order must record objective reclassification, runtime topology, allowed actions, forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps. This mode remains L0-L2 coordination by default: it does not select tasks, dispatch threads, run commands automatically, grant L3 execution, operate hardware, use credentials, deploy, roll back, or write target projects without explicit user approval in the work order.
 
 Start from `templates/coordination/integration-bringup-work-order.md` when using this mode.

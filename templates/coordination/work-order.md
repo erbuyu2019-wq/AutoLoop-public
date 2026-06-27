@@ -72,6 +72,17 @@ These fields describe who owns review, commit, and final acceptance gates. They 
 - Do not require amend as the default. Amend report-only corrections only when the branch is local, unpublished, worker-owned, and has no shared-history risk.
 - This is human coordination guidance only; do not add checker-enforced git freshness, automatic amend/rebase behavior, automatic refresh rules, or history rewriting.
 
+## Coordinator Final Git Evidence Guidance
+
+- `uncommitted implementation package`: if source, tests, work order, or worker report are still uncommitted and the work order permits worker commits, returning to the worker to commit the current package is normal.
+- `clean committed package with stale report evidence`: if the branch/worktree is clean, required checks passed, the package is committed, and only the worker report's `HEAD`, integration-branch, divergence, or recent-log evidence is stale, coordinator final git evidence capture is the default acceptance path.
+- `dirty worktree or post-verification source/test changes`: if source, tests, config, runtime behavior, or other implementation files changed after verification, return to the worker for repair or revalidation.
+- `material integration drift`: if drift can invalidate evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement, request a bounded refresh or coordinator/user decision.
+- When the coordinator has repository/worktree access, run final git evidence checks directly instead of requesting a worker refresh solely to make the worker report include final `HEAD`.
+- If the coordinator cannot access the worker worktree, ask for one concise final git-state handoff rather than a full report rewrite, unless material drift or failed checks require worker repair.
+- Label worker-side earlier git evidence as `implementation/code evidence` or `pre-report-commit evidence`, and label coordinator-side final checks as `coordinator final acceptance evidence`.
+- This is human coordination guidance only; do not add checker-enforced freshness, automatic amend/rebase behavior, branch locks, merge queues, target-project operations, or history rewriting.
+
 ## Work-Order Size Guidance
 
 - Treat the issued work order as the loop contract for one bounded AutoLoop loop. Existing fields carry the contract: `Summary` names goal and owner, `Allowed Scope` and `Forbidden Scope` define the boundary, `Required Approach` defines execution discipline, `Gate Authority` defines review/commit/acceptance ownership, `Acceptance Commands` define evidence, stop-and-report conditions define interruption points, and `Required Return Report` defines the evidence return path.
