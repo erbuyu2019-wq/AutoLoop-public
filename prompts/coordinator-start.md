@@ -16,7 +16,7 @@ Complete these steps in order:
 4. State which tasks can continue, which tasks need rework or more evidence, and which tasks trigger a user decision gate.
    When a completed worker package is clean, committed, and only the worker report's git evidence is stale, prefer coordinator final git evidence capture over returning the package to the worker for another report refresh.
 5. If a work order needs to be created or recommended, first state `Granularity Gate: <bounded bundle | split work orders | report-only | integration-bringup | no dispatch> - <reason>`. Then output only a short work-order draft and include a complete `Dispatch Instructions` block in the final response. If no worker should be started now, output one line: `No dispatch: <reason>`.
-   The dispatch instructions must include the target thread or owner lane, workspace, branch, work order, expected report, concurrency mode, granularity decision, file boundary, registry note, and startup sentence.
+   The dispatch instructions must include dispatch channel, recipient thread or owner lane, workspace or worktree, branch, work order, expected report, concurrency mode, granularity decision, integration baseline policy, file boundary, registry note, fallback, send receipt, and startup sentence.
    `Dispatch note` is only a planning cue inside the work order, not a complete handoff. If the target thread, workspace, or concurrency mode cannot be judged safely, set concurrency to `ask-user` and make the required user choice explicit.
    For parallel branches, include the integration baseline policy in the work order or dispatch block so the worker knows whether branch-local readiness is enough or current `master`/`main` proof is required.
 
@@ -34,7 +34,8 @@ Constraints:
 
 - Treat `docs/coordination/` and git/worktree state as the source of truth for current status, not chat memory.
 - `board.md` is the task status source. `thread-registry.md` is execution context only; it is not evidence for automatic dispatch or task completion.
-- Dispatch instructions are a manual handoff block for the user to copy into a worker thread. They do not mean automatic dispatch, worktree locking, or Codex Desktop control.
+- Dispatch channels are `manual-copy`, `codex-cross-thread-send`, or `external-handoff`. `manual-copy` is the portable default and fallback. `codex-cross-thread-send` is optional when the current environment supports it, but do not name or require a specific private tool. `external-handoff` must record the handoff path and target owner.
+- Dispatch instructions are a manual handoff block. They do not mean automatic dispatch, thread discovery, automatic retry, worktree locking, registry mutation, or Codex Desktop control.
 - Do not write temporary status into memory.
 - Do not automatically merge, release, delete worktrees, handle real credentials, or handle real private data.
 - Do not ask workers to chase every unrelated `master` or `main` movement; perform drift-impact review before requesting an expensive refresh.

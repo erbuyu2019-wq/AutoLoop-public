@@ -13,6 +13,7 @@
 - Planning depth: `<implementation/proof next | user decision | no dispatch | more planning justified> - <short reason>`
 - Loop budget: `<none | short timebox | small fix-test cycle budget | stop after named blocker>`
 - Integration baseline policy: `<dispatch-base acceptable | refresh-before-merge | batch-baseline | current-integration required | not applicable> - <short reason>`
+- Dispatch channel: `<manual-copy | codex-cross-thread-send | external-handoff | not applicable> - <fallback or handoff note>`
 - Dispatch note: `none` or brief target / workspace / concurrency cue; this is not a complete manual dispatch instruction
 
 ## Context
@@ -145,3 +146,5 @@ Also include:
 - Remaining risk or unverified items.
 
 `Dispatch note` is only a planning cue in this work order. The coordinator's final response must still provide a complete manual dispatch instruction block or a short `No dispatch` reason.
+
+Dispatch channel is human handoff guidance only. Use `manual-copy` as the portable default and fallback; use `codex-cross-thread-send` only as optional acceleration when the current environment supports it without naming or requiring a specific private tool; use `external-handoff` only when the handoff path and target owner are explicit. Dispatch channel fields do not authorize automatic sending, thread discovery, registry mutation, checker-enforced dispatch records, thread locking, merge queues, or Codex Desktop thread control.

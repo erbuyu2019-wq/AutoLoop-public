@@ -56,6 +56,8 @@ Task:
 - For `integration-bringup`, require objective reclassification, runtime topology, allowed and forbidden actions, stop rules, and an evidence matrix that separates command accepted, runtime state, data flow, user-visible outcome, and remaining gaps.
 - `integration-bringup` must not imply automatic execution, automatic retry, automatic task/report discovery, automatic dispatch, board writes, registry mutation, L3 authority, hardware access, credential use, deployment, rollback, production access, or target-project writes.
 - Treat `Dispatch note` as a planning cue only. It is not a complete manual handoff and does not replace the coordinator's final `dispatch instruction` block or `No dispatch` reason.
+- When drafting dispatch guidance, include `Dispatch channel: manual-copy | codex-cross-thread-send | external-handoff`. Use `manual-copy` as the default fallback; use `codex-cross-thread-send` only as optional acceleration without naming or requiring a specific private tool; use `external-handoff` only when an external path and target owner are explicit.
+- Keep `Send to / Recipient thread` separate from `Workspace / worktree`, and require `Fallback` plus `Send receipt: not sent | sent by coordinator | user copied | external handoff written`.
 - In `Required Return Report`, list these exact worker-report headings: `Summary`, `Changed Scope`, `Verification`, `Contract Impact`, `Not Verified`, `Risks`, and `Next Suggested Step`.
 - In `Required Return Report`, list the strict checked values: Summary `Result` must be `done`, `partial`, `blocked`, or `rejected`; Summary `Evidence level` must be `local-readiness`, `hardware-deferred`, `live-smoke-required`, `live-smoke-complete`, or `not applicable`; `Next Suggested Step` must be `continue`, `review`, `needs coordinator decision`, `needs user decision`, or `blocked`.
 - State that a `done` report must not contain `failed`, `not run`, or `not-run` results in the `Verification` table.
@@ -81,6 +83,7 @@ Output:
 - Integration baseline policy:
 - Goal:
 - Dispatch note:
+- Dispatch channel:
 - Allowed Scope:
 - Forbidden Scope:
 - Required Approach:

@@ -28,6 +28,18 @@ For private/public changelog, release-note, and public-export evidence boundarie
 - `Dispatch note` in `work-order.md` is only a planning hint. When a coordinator creates or recommends a work order, the coordinator's final response must include either a complete `dispatch instruction` block or a short `No dispatch` reason.
 - A work order's `Required Return Report` should name the exact strict report headings and checked summary values. New or active worker reports should pass `check-report.ps1 -Strict` before coordinator acceptance.
 
+## Dispatch Channels
+
+Use `manual-copy` as the default dispatch channel. The coordinator outputs a complete dispatch block for the user to copy into the recipient thread.
+
+Use `codex-cross-thread-send` only as optional acceleration when the current Codex App environment supports sending content to another thread. Do not name or require a specific private tool, and still provide a manual-copy fallback plus a human-readable recipient thread label.
+
+Use `external-handoff` for a file, issue, Obsidian note, report, or other external handoff path. Record the handoff path and target owner; the external artifact is not the current coordination state source unless the project explicitly says so.
+
+Keep `Recipient thread` separate from `Workspace / worktree`, because one worktree may have more than one relevant thread. Dispatch blocks should record dispatch channel, recipient thread or owner lane, workspace or worktree, branch, work order, expected report, concurrency mode, granularity decision, integration baseline policy, file boundary, registry note, fallback, send receipt, and startup sentence.
+
+Dispatch channel guidance is manual L0-L2 coordination only. It does not add checker-enforced dispatch records, automatic send attempts, thread discovery, registry mutation, automatic retry, thread locking, merge queues, or Codex Desktop thread control.
+
 ## Loop
 
 1. The coordinator reads `board.md`, `decision-log.md`, `gates.md`, and current git/worktree status.
@@ -115,7 +127,7 @@ Use `templates/coordination/coordinator-startup-checklist.md` when a session nee
 
 If `docs/coordination/thread-registry.md` exists, read it during coordinator startup as a manual active-thread context list. Use it to notice owner lanes, workspaces, expected reports, and stale rows; do not use it to rank tasks, assign owners, dispatch threads, or close board items.
 
-When preparing or recommending a new work order, include a dispatch instruction block from `templates/coordination/dispatch-instruction.md`. It should name the target thread or owner lane, workspace, branch, work order, expected report, concurrency mode, granularity decision, file boundary, registry note, and startup sentence. If the target or concurrency mode is unclear, use `ask-user`. If no worker should be started, include a short `No dispatch` reason instead. A `Dispatch note` field in the work order is not a substitute for this final-response handoff.
+When preparing or recommending a new work order, include a dispatch instruction block from `templates/coordination/dispatch-instruction.md`. It should name the dispatch channel, recipient thread or owner lane, workspace or worktree, branch, work order, expected report, concurrency mode, granularity decision, integration baseline policy, file boundary, registry note, fallback, send receipt, and startup sentence. If the target, workspace, or concurrency mode is unclear, use `ask-user` and `Send receipt: not sent`. If no worker should be started, include a short `No dispatch` reason instead. A `Dispatch note` field in the work order is not a substitute for this final-response handoff.
 
 Interpret the aggregate result conservatively:
 
@@ -141,7 +153,7 @@ Do not use the summary output to automatically rank tasks, write board rows, ass
 
 - Current state comes from the target project's `docs/coordination/`, not chat history.
 - `thread-registry.md` is execution context only; `board.md` remains the task source of truth.
-- Dispatch instructions are manual copy/paste handoffs only; they do not create locks, schedule work, or control Codex Desktop threads.
+- Dispatch instructions are manual handoffs only; they do not create locks, schedule work, discover threads, mutate registries, or control Codex Desktop threads.
 - A `Dispatch note` alone is not enough for multi-thread handoff; use the full `dispatch-instruction.md` fields in the coordinator response.
 - Memory should hold only durable decisions and repeated failure modes, not temporary task state.
 - OpenSpec is used only when the target project already has `openspec/` or the user explicitly requests it.

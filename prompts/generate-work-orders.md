@@ -23,6 +23,7 @@ Requirements:
    - stop-and-report conditions
    - `Loop budget` as `none` or a manual timebox / small fix-test cycle budget when useful
    - `Integration baseline policy` as `dispatch-base acceptable`, `refresh-before-merge`, `batch-baseline`, `current-integration required`, or `not applicable`
+   - dispatch channel guidance as `manual-copy`, `codex-cross-thread-send`, or `external-handoff`, with recipient thread, workspace/worktree, fallback, and send receipt
 4. Keep each work order short and specific. Do not output long design notes.
 5. If a task triggers `gates.md`, do not generate an execution work order. Generate a user-decision summary instead.
 6. Apply the Granularity Gate before drafting each work order:
@@ -67,6 +68,12 @@ Requirements:
    - Use `current-integration required` only for high-risk work, overlapping files, shared contracts, config, schemas, tests, runtime/deployment behavior, release, hardware, production paths, or explicit requirements.
    - Require worker reports to record dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
    - Do not add checker-enforced freshness rules, automatic branch locking, automatic merge queues, automatic task selection, or automatic dispatch.
+13. For dispatch channel compatibility:
+   - Use `manual-copy` as the portable default and fallback.
+   - Use `codex-cross-thread-send` only when the current Codex App environment supports it; do not name or require a specific private tool.
+   - Use `external-handoff` only when a file, issue, note, report, or other handoff path and target owner are explicit.
+   - Keep recipient thread or owner lane separate from workspace or worktree.
+   - Do not add automatic send attempts, thread discovery, registry mutation, checker-enforced dispatch records, thread locking, or Codex Desktop control.
 
 Output format:
 
@@ -79,6 +86,7 @@ Output format:
 - Planning depth:
 - Loop budget:
 - Integration baseline policy:
+- Dispatch channel:
 - Goal:
 - Allowed Scope:
 - Forbidden Scope:

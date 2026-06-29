@@ -5,6 +5,7 @@
 ### Added
 
 - Added public guidance for keeping private coordination history, public changelog entries, release notes, and public-export sync evidence separate.
+- Added tool-neutral dispatch channel guidance for manual copy, optional cross-thread send, and external handoff workflows while preserving manual fallback.
 
 ### Changed
 
