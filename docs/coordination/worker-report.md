@@ -14,6 +14,8 @@
 - Integration baseline policy: `<dispatch-base acceptable | refresh-before-merge | batch-baseline | current-integration required | not applicable>`
 - Integration drift status: `<none observed | observed-no-refresh-needed | refresh performed | refresh required-deferred | not applicable> - <short reason>`
 
+This worker report is the Execution Record for the work order's Loop Contract. It should give the coordinator enough evidence to make an Acceptance Decision without relying on chat history. See `../loop-contract-model.md` for the model map.
+
 ## Changed Scope
 
 | File / Area | Change | Reason |

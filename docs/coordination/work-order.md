@@ -16,6 +16,8 @@
 - Dispatch channel: `<manual-copy | codex-cross-thread-send | external-handoff | not applicable> - <fallback or handoff note>`
 - Dispatch note: `none` or brief target / workspace / concurrency cue; this is not a complete manual dispatch instruction
 
+This work order is the Loop Contract for one bounded AutoLoop loop. See `../loop-contract-model.md` for the model map.
+
 ## Context
 
 - Project stage goal: `<stage goal>`
@@ -87,6 +89,7 @@ These fields describe who owns review, commit, and final acceptance gates. They 
 ## Work-Order Size Guidance
 
 - Treat the issued work order as the loop contract for one bounded AutoLoop loop. Existing fields carry the contract: `Summary` names goal and owner, `Allowed Scope` and `Forbidden Scope` define the boundary, `Required Approach` defines execution discipline, `Gate Authority` defines review/commit/acceptance ownership, `Acceptance Commands` define evidence, stop-and-report conditions define interruption points, and `Required Return Report` defines the evidence return path.
+- The corresponding worker report is the Execution Record, and coordinator review or integration review is the Acceptance Decision. These terms describe existing artifacts only; they do not add a mandatory artifact, checker target, schema field, enum value, or automation level.
 - A loop may continue only while it stays inside that contract. Stop and report when scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change.
 - Make the granularity decision before drafting or dispatching. This is a human coordinator judgment, not a checker-enforced schema.
 - A work order should be small enough for one owner, one worktree, and one reviewable evidence bundle.

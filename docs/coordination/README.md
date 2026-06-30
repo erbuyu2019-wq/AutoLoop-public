@@ -3,6 +3,7 @@
 These templates onboard a target project into the lightweight AutoLoop coordination protocol. The coordinator uses them to maintain a short board, create work orders, review worker reports, and decide when user approval is required.
 
 For the product-level loop-engineering vocabulary that these templates support, see `../loop-engineering.md`.
+For the lightweight Loop Contract model that maps existing work orders, worker reports, and coordinator reviews to one bounded loop, see `../loop-contract-model.md`.
 For private/public changelog, release-note, and public-export evidence boundaries, see `../release-boundaries.md`.
 
 ## Files
@@ -43,10 +44,10 @@ Dispatch channel guidance is manual L0-L2 coordination only. It does not add che
 ## Loop
 
 1. The coordinator reads `board.md`, `decision-log.md`, `gates.md`, and current git/worktree status.
-2. The coordinator fills a short `work-order.md` for one owner or one bounded subagent task.
+2. The coordinator fills a short `work-order.md` Loop Contract for one owner or one bounded subagent task.
 3. The coordinator outputs a manual dispatch instruction when asking the user to start a worker thread.
-4. The worker checks the dispatch instruction against the work order, stays inside allowed scope, and returns a `worker-report.md`.
-5. The coordinator reviews strict report shape, verification evidence, contract impact, not-verified items, and risks.
+4. The worker checks the dispatch instruction against the work order, stays inside allowed scope, and returns a `worker-report.md` Execution Record.
+5. The coordinator reviews strict report shape, verification evidence, contract impact, not-verified items, and risks as the Acceptance Decision.
 6. The coordinator updates `board.md`; only gate-triggering items interrupt the user.
 7. The coordinator writes `stage-closeout.md` when a stage needs compression before the next stage.
 
@@ -62,7 +63,9 @@ Before drafting or dispatching a work order, record a `Granularity Gate` decisio
 
 A work order should close a useful feedback chain, not only one mechanical action. Useful chains include `edit-test-observe`, `hypothesis-fix-verify`, `deploy-start-trigger-observe-classify`, and `evidence-refresh-review`. For low-risk local work, allow reasonable edit-test iterations, harmless retries, and local reruns inside the work order. Reserve explicit one-attempt limits for live hardware, target-device mutation, real credentials, deployment, production, release, rollback, destructive actions, irreversible state, or explicit user or work-order requirements.
 
-Treat each issued work order as the loop contract for one bounded AutoLoop loop. Existing fields define the contract: goal and owner, allowed and forbidden scope, required approach, acceptance commands, stop-and-report conditions, and required return report. Use manual loop budgets such as a short timebox or a small fix-test cycle budget when they help keep a same-boundary feedback loop together. The loop must stop when its budget is exceeded, a new blocker class appears, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change. This is coordinator guidance only; it does not add checker-enforced budgets or automatic retry behavior.
+Treat each issued work order as the Loop Contract for one bounded AutoLoop loop. Existing fields define entry condition, scope boundary, execution discipline, evidence requirement, gate ownership, stop conditions, and exit condition; `worker-report.md` is the Execution Record and coordinator review or integration review is the Acceptance Decision. Use `../loop-contract-model.md` as the concise map instead of repeating the model in every prompt or template.
+
+Use manual loop budgets such as a short timebox or a small fix-test cycle budget when they help keep a same-boundary feedback loop together. The loop must stop when its budget is exceeded, a new blocker class appears, or scope, security, data, credential, hardware, deployment, production, rollback, or verification assumptions change. This is coordinator guidance only; it does not add checker-enforced budgets or automatic retry behavior.
 
 Use `Gate Authority` fields to keep review, commit, and final acceptance ownership explicit without binding AutoLoop to a specific review tool. A project may map its own review mechanism to `project-defined` or `external`, but AutoLoop's reusable templates should stay tool-neutral. If a worker lacks authority to run a project-defined or external gate, the worker should complete allowed local work, report the deferred gate, and hand the decision back to the coordinator or user.
 

@@ -6,12 +6,14 @@
 
 - Added public guidance for keeping private coordination history, public changelog entries, release notes, and public-export sync evidence separate.
 - Added tool-neutral dispatch channel guidance for manual copy, optional cross-thread send, and external handoff workflows while preserving manual fallback.
+- Added a lightweight Loop Contract model map that explains work orders, worker reports, and coordinator reviews as existing protocol artifacts.
 
 ### Changed
 
 - Clarified parallel branch baseline and drift-impact guidance so workers can report branch-local readiness while coordinators own final integration proof.
 - Clarified report-only HEAD drift guidance so coordinators capture final acceptance git evidence instead of sending workers into self-referential report refresh loops.
 - Clarified that clean committed packages with stale worker-report git evidence should use coordinator final git evidence capture by default, while preserving worker refresh for uncommitted packages, dirty worktrees, post-verification source/test changes, and material integration drift.
+- Clarified Fast Integration Check as the default integration-review path and Deep Integration Review as a triggered escalation.
 
 ## v0.1.3 - 2026-06-17
 

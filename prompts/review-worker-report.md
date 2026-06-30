@@ -49,6 +49,7 @@ Check:
 27. If the work order had an integration baseline policy, check that the report records dispatch/base commit, verified branch HEAD, observed integration branch when relevant, and drift status.
 28. Perform material drift review before requesting a worker refresh. Request refresh only when drift can invalidate implementation evidence through overlapping files, shared contracts, schemas, config, tests, runtime/deployment behavior, release, hardware, production paths, explicit current-integration proof, or a work-order requirement.
 29. Keep branch-local worker evidence separate from coordinator final integration proof. If accepting a merge, batch receive, push, or report-only boundary, record final integration proof after that boundary.
+30. Use Fast Integration Check as the default for a complete same-owner, same-boundary report. Recommend Deep Integration Review only when there is cross-owner conflict, shared contract/API/schema/config/test/runtime/deployment impact, hardware/production/release risk, evidence conflict, failed checks, material drift, or an explicit user/coordinator/work-order requirement.
 
 Output format:
 
@@ -69,6 +70,7 @@ Output format:
 - Coordinator final git checks:
 - Loop contract:
 - Loop budget / stop conditions:
+- Integration review depth:
 
 ## Coordination Decision
 
@@ -78,6 +80,7 @@ Output format:
 - `hold`: wait for another owner, gate, or integration order.
 - Granularity Gate: `<bounded bundle | split work orders | report-only | integration-bringup | no dispatch> - <reason>`
 - Fast lane: `<yes | no> - <reason>`
+- Integration review depth: `<Fast Integration Check | Deep Integration Review> - <trigger or no trigger>`
 - Evidence value: `<direct product proof | runtime proof | integration proof | proxy evidence | planning evidence> - <reason>`
 - Planning depth: `<implementation/proof next | user decision | no dispatch | more planning justified> - <reason>`
 - Deferred gate handling: `<none | coordinator acceptance needed | user decision needed | independent review needed before commit> - <reason>`
@@ -105,4 +108,5 @@ Constraints:
 - Do not return a clean committed package to the worker only because the worker report's git evidence is stale; coordinator final git evidence capture is the default acceptance path.
 - Do not turn manual loop budgets into checker-enforced counting or automatic retry behavior.
 - Do not require workers to chase every unrelated `master` or `main` movement. Require current-integration proof only when the work order demands it or drift impact can invalidate the worker evidence.
+- Do not recommend Deep Integration Review by default for ordinary complete same-owner, same-boundary worker reports.
 ```

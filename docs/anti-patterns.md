@@ -57,3 +57,11 @@ Problem: Public templates require a specific private review tool, agent skill, p
 Why it hurts: Target projects cannot map their own review process to AutoLoop.
 
 Use instead: Use tool-neutral fields such as `Review gate`, `Independent review`, `Commit authority`, and `Final acceptance owner`. Put project-specific mappings in the target project's own instructions.
+
+## Adding Speculative Anti-Patterns
+
+Problem: Anti-patterns are added because a process preference sounds reasonable, not because AutoLoop or a target project observed the failure mode.
+
+Why it hurts: The guidance becomes noisy and can push coordinators toward unnecessary process, extra artifacts, or default deep review.
+
+Use instead: Add anti-patterns from observed failures, repeated review findings, or concrete coordination breakdowns. Keep each item tied to a real risk and a smaller replacement behavior.
