@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## v0.1.4 - 2026-06-30
+
 ### Added
 
 - Added public guidance for keeping private coordination history, public changelog entries, release notes, and public-export sync evidence separate.
@@ -14,6 +18,10 @@
 - Clarified report-only HEAD drift guidance so coordinators capture final acceptance git evidence instead of sending workers into self-referential report refresh loops.
 - Clarified that clean committed packages with stale worker-report git evidence should use coordinator final git evidence capture by default, while preserving worker refresh for uncommitted packages, dirty worktrees, post-verification source/test changes, and material integration drift.
 - Clarified Fast Integration Check as the default integration-review path and Deep Integration Review as a triggered escalation.
+
+### Boundary
+
+- No daemon, GUI, automatic dispatch, autonomous execution, package publishing, deployment, merge, rollback, credential handling, hardware handling, production behavior, private review-tool dependency, or L3 automation behavior.
 
 ## v0.1.3 - 2026-06-17
 
