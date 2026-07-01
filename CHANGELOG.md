@@ -2,7 +2,16 @@
 
 ## Unreleased
 
-No unreleased changes yet.
+### Added
+
+- Added public-facing onboarding links for parallel assistant workflows, boundaries against agent runtimes, and launch-copy adaptation.
+- Added a public-safe parallel Codex workflow use case.
+- Added a neutral AutoLoop versus agent-runtime comparison.
+- Added launch-post and GitHub topic suggestion drafts for human-maintained project promotion.
+
+### Boundary
+
+- No daemon, GUI, automatic dispatch, autonomous execution, package publishing, deployment, merge, rollback, release creation, GitHub metadata mutation, credential handling, hardware handling, production behavior, or L3 automation behavior.
 
 ## v0.1.4 - 2026-06-30
 

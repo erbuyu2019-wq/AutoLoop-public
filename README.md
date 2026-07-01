@@ -1,8 +1,48 @@
 # AutoLoop
 
-AutoLoop is a lightweight coordination workflow for Codex App based development. It helps a coordinator thread manage work orders, long-lived module threads, worktree status, worker reports, verification evidence, and user decision gates.
+AutoLoop is a lightweight coordination protocol and evidence-gate toolkit for AI-assisted development. It helps maintainers coordinate Codex or similar assistant-driven work across threads, worktrees, and owner lanes without turning that coordination into an autonomous runtime.
 
-AutoLoop is not a background daemon, GUI, project management database, autonomous coding robot, or replacement for a target project's own `AGENTS.md`, tests, OpenSpec, CI, release process, or human approval gates.
+Use it when parallel assistant work needs a clear loop:
+
+```text
+work order -> worker report -> coordinator review / integration review -> closeout
+```
+
+AutoLoop is for maintainers who need:
+
+- Bounded work orders with explicit allowed and forbidden scope.
+- Worker reports that return changed files, verification, contract impact, risks, and gaps.
+- Coordinator review before board updates, integration decisions, commits, releases, or user gates.
+- A small set of local protocol checks that make coordination state easier to audit.
+
+AutoLoop is not a daemon, GUI, autonomous agent runtime, project-management database, merge queue, deployment tool, or replacement for a target project's own `AGENTS.md`, tests, OpenSpec, CI, release process, or human approval gates.
+
+## Try It Quickly
+
+AutoLoop does not need a new installer. Preview the coordination skeleton in a target project first:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\coordination\init-autoloop.ps1 `
+  -ProjectRoot <target-project> `
+  -ProjectName <name> `
+  -Owners app,docs,tests `
+  -DryRun
+```
+
+Then run the repository verifier before accepting changes to AutoLoop itself:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-autoloop.ps1
+```
+
+Start with:
+
+- `docs/onboarding-modes.md` for greenfield and brownfield adoption modes.
+- `docs/coordination/README.md` for the coordinator loop and command references.
+- `docs/use-cases/parallel-codex-workflow.md` for a public-safe parallel assistant workflow.
+- `docs/comparisons/autoloop-vs-agent-runtime.md` for boundaries against runtimes, PM tools, specs, and chat-only coordination.
+- `docs/marketing/launch-post.md` for a public-safe launch draft and social snippets.
+- `docs/marketing/github-topics.md` for repository description and topic suggestions.
 
 For product positioning and loop taxonomy, see `docs/loop-engineering.md`.
 For common misuse patterns, see `docs/anti-patterns.md`.
